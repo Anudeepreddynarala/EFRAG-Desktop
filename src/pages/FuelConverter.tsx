@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface FuelData {
   id: string;
@@ -197,26 +198,30 @@ const FuelConverter = () => {
   const totalEnergy = totalRenewableEnergy + totalNonRenewableEnergy;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/')}
-            className="mr-4"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to VSME Form
-          </Button>
-          <h1 className="text-3xl font-bold text-gray-900">Fuel Converter</h1>
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header with Theme Toggle */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/')}
+              className="mr-4"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to VSME Form
+            </Button>
+            <h1 className="text-3xl font-bold text-foreground">Fuel Converter</h1>
+          </div>
+          <ThemeToggle />
         </div>
 
-        <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h3 className="font-semibold text-yellow-800 mb-2">Disclaimer</h3>
-          <p className="text-sm text-yellow-700">
-            This converter is intended solely to illustrate how energy consumption (in MWh) can be calculated from various fuel types. 
-            EFRAG assumes no responsibility or liability for the content or for any direct, indirect, or incidental consequences or damages 
-            resulting from the use of this fuel converter. The typical values for Net Calorific Value (NCV) and Density are provided for 
+        <div className="mb-6 bg-accent/20 border-2 border-accent/30 rounded-xl p-5 shadow-sm">
+          <h3 className="font-semibold text-accent-foreground mb-2">Disclaimer</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            This converter is intended solely to illustrate how energy consumption (in MWh) can be calculated from various fuel types.
+            EFRAG assumes no responsibility or liability for the content or for any direct, indirect, or incidental consequences or damages
+            resulting from the use of this fuel converter. The typical values for Net Calorific Value (NCV) and Density are provided for
             each fuel type, but may vary depending on factors such as national regulations or specific fuel characteristics.
           </p>
         </div>
@@ -266,12 +271,12 @@ const FuelConverter = () => {
                       <>
                         <div>
                           <Label>State of matter</Label>
-                          <Input value={selectedFuel.state} readOnly className="bg-gray-50" />
+                          <Input value={selectedFuel.state} readOnly className="bg-muted" />
                         </div>
 
                         <div>
                           <Label>Typical renewability state</Label>
-                          <Input value={selectedFuel.renewability} readOnly className="bg-gray-50" />
+                          <Input value={selectedFuel.renewability} readOnly className="bg-muted" />
                         </div>
 
                         <div>
@@ -309,7 +314,7 @@ const FuelConverter = () => {
                           <Input
                             value={conversion.energyMWh.toFixed(4)}
                             readOnly
-                            className="bg-gray-50 font-mono"
+                            className="bg-muted font-mono"
                           />
                         </div>
                       </>
@@ -327,7 +332,7 @@ const FuelConverter = () => {
             </Button>
           </div>
 
-          <Card>
+          <Card className="border-2">
             <CardHeader>
               <CardTitle>Total Energy Summary</CardTitle>
             </CardHeader>
@@ -338,7 +343,7 @@ const FuelConverter = () => {
                   <Input
                     value={totalEnergy.toFixed(4)}
                     readOnly
-                    className="bg-gray-50 font-mono font-bold"
+                    className="bg-muted font-mono font-bold"
                   />
                 </div>
                 <div>
@@ -346,7 +351,7 @@ const FuelConverter = () => {
                   <Input
                     value={totalRenewableEnergy.toFixed(4)}
                     readOnly
-                    className="bg-green-50 font-mono"
+                    className="bg-muted font-mono"
                   />
                 </div>
                 <div>
@@ -354,7 +359,7 @@ const FuelConverter = () => {
                   <Input
                     value={totalNonRenewableEnergy.toFixed(4)}
                     readOnly
-                    className="bg-orange-50 font-mono"
+                    className="bg-muted font-mono"
                   />
                 </div>
               </div>

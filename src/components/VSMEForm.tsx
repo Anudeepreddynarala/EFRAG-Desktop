@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FormSection, Subsection } from "@/components/ui/form-section";
 import { TooltipField } from "@/components/ui/tooltip-field";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function VSMEForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
@@ -3260,7 +3262,7 @@ export function VSMEForm() {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => window.open('/fuel-converter', '_blank')}
+                  onClick={() => navigate('/fuel-converter')}
                   className="w-full sm:w-auto min-w-[200px]"
                 >
                   <span className="mr-2">🔥</span>
@@ -3269,7 +3271,7 @@ export function VSMEForm() {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => window.open('/unit-converter', '_blank')}
+                  onClick={() => navigate('/unit-converter')}
                   className="w-full sm:w-auto min-w-[200px]"
                 >
                   <span className="mr-2">📏</span>

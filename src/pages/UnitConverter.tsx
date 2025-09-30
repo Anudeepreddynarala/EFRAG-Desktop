@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface ConversionFactor {
   [key: string]: number;
@@ -164,18 +165,22 @@ const UnitConverter = () => {
   }, [conversions.length]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/')}
-            className="mr-4"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to VSME Form
-          </Button>
-          <h1 className="text-3xl font-bold text-gray-900">Unit of Measurement Converter</h1>
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header with Theme Toggle */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/')}
+              className="mr-4"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to VSME Form
+            </Button>
+            <h1 className="text-3xl font-bold text-foreground">Unit of Measurement Converter</h1>
+          </div>
+          <ThemeToggle />
         </div>
 
         <div className="space-y-6">
@@ -233,7 +238,7 @@ const UnitConverter = () => {
                     </div>
 
                     <div className="flex items-center justify-center">
-                      <ArrowRight className="h-6 w-6 text-gray-400" />
+                      <ArrowRight className="h-6 w-6 text-muted-foreground" />
                     </div>
 
                     <div>
@@ -266,7 +271,7 @@ const UnitConverter = () => {
                         id={`to-value-${category.name}`}
                         value={conversion?.category === category.name ? conversion.toValue : ''}
                         readOnly
-                        className="bg-gray-50 font-mono"
+                        className="bg-muted font-mono"
                         placeholder="Result"
                       />
                     </div>
@@ -277,9 +282,9 @@ const UnitConverter = () => {
           })}
         </div>
 
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="font-semibold text-blue-800 mb-2">Usage Instructions</h3>
-          <ol className="text-sm text-blue-700 space-y-1">
+        <div className="mt-8 bg-accent/20 border-2 border-accent/30 rounded-xl p-5 shadow-sm">
+          <h3 className="font-semibold text-accent-foreground mb-2">Usage Instructions</h3>
+          <ol className="text-sm text-muted-foreground leading-relaxed space-y-1">
             <li>1. Select the unit category you want to convert (Mass, Volume, Energy, etc.)</li>
             <li>2. Choose the "From" unit from the dropdown</li>
             <li>3. Enter the value you want to convert</li>
