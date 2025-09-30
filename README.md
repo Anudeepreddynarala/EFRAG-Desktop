@@ -1,51 +1,49 @@
 # EFRAG Desktop
 
-A cross-platform desktop application for sustainability reporting following EFRAG (European Financial Reporting Advisory Group) standards.
+A desktop application for sustainability reporting following EFRAG (European Financial Reporting Advisory Group) standards.
+
+## What is EFRAG Desktop?
+
+EFRAG Desktop helps companies create sustainability reports that meet European reporting standards. It's a simple application that runs on your computer (Windows or Mac) without needing an internet connection.
 
 ## Features
 
-### Core Functionality
-- **VSME Form**: Comprehensive Voluntary Sustainability Reporting Standard for Medium-sized Entities
-  - General company information collection
-  - Environmental metrics (energy, emissions, water, waste)
-  - Social disclosures (workforce, employment)
-  - NACE sector classification
-  - Automatic calculations
+### VSME Sustainability Form
+Complete your Voluntary Sustainability Reporting Standard for Medium-sized Entities with an easy-to-use form that covers:
+- Company information
+- Environmental data (energy, emissions, water, waste)
+- Social information (workforce, employment)
+- Automatic calculations
 
-- **Fuel Converter**: Convert 50+ fuel types to energy measurements (MWh)
-  - Multiple fuel states (solid, liquid, gas)
-  - Renewable/non-renewable tracking
+### Fuel Converter
+Convert over 50 different fuel types to energy measurements (MWh). Simply select your fuel type, enter the amount, and get instant calculations.
 
-- **Unit Converter**: Convert measurements across multiple categories
-  - Mass, Volume, Energy, Density, Net Calorific Value
+### Unit Converter
+Convert between different measurement units across 5 categories:
+- Mass (kg, tonnes, pounds)
+- Volume (liters, gallons, barrels)
+- Energy (MWh, kWh, GJ)
+- Density
+- Net Calorific Value
 
-### Desktop-Specific Features
-- **Local Data Persistence**: SQLite database for storing reports
-- **File Operations**: Native save/load dialogs
-- **PDF Export**: Generate professional PDF reports
-- **JSON Import/Export**: Backup and share report data
-- **Native Menus**: OS-integrated application menus
-- **Offline Operation**: Full functionality without internet connection
-- **Cross-Platform**: Runs on Windows and macOS
+### Save Your Work
+All your reports are saved automatically on your computer. You can:
+- Save and load reports anytime
+- Export reports as PDF files
+- Share data as JSON files
+- Work completely offline
 
-## Technology Stack
+## Technology
 
+Built with modern web technologies wrapped in a desktop application:
 - **Frontend**: React 18 + TypeScript
-- **Build Tool**: Vite
-- **UI Framework**: Tailwind CSS + shadcn-ui
-- **Desktop Framework**: Electron
-- **Database**: SQLite (better-sqlite3)
-- **PDF Generation**: jsPDF + html2canvas
-- **State Management**: React Query + React Hook Form
+- **Desktop**: Electron
+- **Database**: SQLite (local storage)
+- **Styling**: Tailwind CSS
 
-## Development
+## For Developers
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-
-### Installation
-
+### Quick Start
 ```bash
 # Install dependencies
 npm install
@@ -54,81 +52,32 @@ npm install
 npm run dev
 ```
 
-The application will start in Electron with hot-reload enabled.
-
-### Building
-
+### Building for Production
 ```bash
 # Build for current platform
 npm run build
 
-# Build for Windows
-npm run build:win
-
 # Build for macOS
 npm run build:mac
 
-# Build without packaging (for testing)
-npm run build:dir
+# Build for Windows
+npm run build:win
 ```
 
 Built applications will be in the `release/` directory.
 
-## Project Structure
-
+### Project Structure
 ```
 EFRAG-app/
-├── electron/           # Electron main and preload scripts
-│   ├── main.ts        # Main process
-│   ├── preload.ts     # Preload script (IPC bridge)
-│   └── tsconfig.json  # TypeScript config for Electron
-├── src/               # React application
-│   ├── components/    # React components
-│   ├── hooks/         # Custom hooks (including Electron hooks)
-│   ├── pages/         # Page components
-│   ├── utils/         # Utilities (PDF export, file operations)
-│   └── data/          # Static data files
-├── public/            # Static assets
-├── build/             # Build assets (icons)
-└── dist/              # Built web app
+├── electron/          # Electron main and preload scripts
+├── src/              # React application
+│   ├── components/   # React components
+│   ├── pages/        # Page components
+│   ├── hooks/        # Custom hooks
+│   └── utils/        # Utilities
+├── public/           # Static assets
+└── release/          # Built applications
 ```
-
-## Building for Distribution
-
-### Windows
-The build creates:
-- NSIS installer (.exe)
-- Portable executable
-
-Requirements:
-- Windows 10 or later
-- No additional runtime dependencies
-
-### macOS
-The build creates:
-- DMG disk image
-- ZIP archive
-
-Requirements:
-- macOS 10.13 or later
-- Code signing recommended for distribution
-
-## Database
-
-The application uses SQLite for local storage:
-- Location: User data directory (`app.getPath('userData')`)
-- File: `efrag.db`
-- Tables:
-  - `reports`: Saved sustainability reports
-  - `settings`: Application settings
-
-## Keyboard Shortcuts
-
-- `Ctrl/Cmd + N`: New Report
-- `Ctrl/Cmd + O`: Open Report
-- `Ctrl/Cmd + S`: Save Report
-- `Ctrl/Cmd + E`: Export as PDF
-- `Ctrl/Cmd + Q`: Quit (macOS)
 
 ## License
 
@@ -136,4 +85,4 @@ Copyright © 2025 EFRAG Team
 
 ## Support
 
-For issues and feature requests, please use the GitHub issue tracker.
+For technical issues, please check the [Quick Start Guide](QUICKSTART.md) or contact support.

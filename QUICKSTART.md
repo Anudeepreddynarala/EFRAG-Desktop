@@ -1,209 +1,156 @@
-# Quick Start Guide - EFRAG Desktop
+# Download EFRAG Desktop
 
-## For Users
+Get started with EFRAG Desktop in minutes. Simply download the version for your computer and start creating sustainability reports.
 
-### Installation
+## Choose Your Version
 
-#### macOS
-1. Download `EFRAG Desktop-1.0.0-arm64.dmg` (for Apple Silicon) or `-x64.dmg` (for Intel)
-2. Open the DMG file
-3. Drag "EFRAG Desktop" to your Applications folder
-4. Launch from Applications
+### For Mac Users
 
-**Note:** First time you may see a security warning. Go to System Preferences > Security & Privacy and click "Open Anyway".
+**Do you have a newer Mac (2020 or later)?**
+- [Download for Mac (Apple Silicon)](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG-Desktop-1.0.0-arm64.dmg)
 
-#### Windows
-1. Download `EFRAG Desktop Setup 1.0.0.exe`
-2. Run the installer
-3. Choose installation directory
-4. Launch from Start Menu or Desktop shortcut
+**Do you have an older Mac (before 2020)?**
+- [Download for Mac (Intel)](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG-Desktop-1.0.0-x64.dmg)
 
-**Alternative:** Download the portable version (`EFRAG Desktop 1.0.0.exe`) which doesn't require installation.
+**Not sure which one you have?**
+Click the Apple logo () in the top-left corner of your screen, then click "About This Mac". If it says "Apple M1", "M2", or "M3", download Apple Silicon. If it says "Intel", download Intel.
 
-### First Launch
+### For Windows Users
 
-When you first open EFRAG Desktop:
-1. The app creates a local database in your user data folder
-2. All your reports are saved locally
-3. No internet connection required
+- [Download for Windows](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG-Desktop-Setup-1.0.0.exe)
+
+Works with Windows 10 and Windows 11.
+
+---
+
+## Installing on Mac
+
+1. **Download** the file by clicking the link above
+2. **Open** the downloaded file (it ends with .dmg)
+3. **Drag** the EFRAG Desktop icon into the Applications folder
+4. **Find** EFRAG Desktop in your Applications folder and double-click to open
+
+**First time opening:** Your Mac might show a security message. If this happens:
+- Open System Preferences (or System Settings)
+- Click Security & Privacy
+- Click "Open Anyway" next to the EFRAG Desktop message
+
+## Installing on Windows
+
+1. **Download** the file by clicking the link above
+2. **Run** the installer (double-click the downloaded file)
+3. **Follow** the on-screen instructions
+4. **Launch** EFRAG Desktop from your Start Menu or Desktop shortcut
+
+**First time opening:** Windows might show a security warning. Click "More info" then "Run anyway" to proceed.
+
+---
+
+## Using EFRAG Desktop
 
 ### Creating Your First Report
 
-1. Click **File > New Report** (or press Ctrl/Cmd+N)
-2. Fill in the VSME Sustainability Form:
-   - General Information (company details, reporting period)
-   - Environmental Disclosures (energy, emissions, water, waste)
-   - Social Disclosures (workforce, employment)
-3. Click **Save** to store locally (or press Ctrl/Cmd+S)
+1. Open EFRAG Desktop
+2. Click **File** in the top menu, then **New Report**
+3. Fill in your company information
+4. Add your environmental and social data
+5. Click **File**, then **Save Report** to save your work
 
-### Using the Converters
+### Saving Your Report as PDF
 
-#### Fuel Converter
-1. Click **Fuel Converter** in the navigation
-2. Select fuel type from dropdown
-3. Choose unit of measurement
-4. Enter amount
-5. View energy calculation in MWh
-6. Add multiple fuel types as needed
+1. Complete your report
+2. Click **File** in the top menu
+3. Click **Export as PDF**
+4. Choose where to save the file
+5. Click **Save**
 
-#### Unit Converter
-1. Click **Unit Converter** in the navigation
-2. Select category (Mass, Volume, Energy, etc.)
-3. Choose "from" and "to" units
-4. Enter value
-5. See instant conversion result
+You can now email this PDF or print it.
 
-### Saving & Loading Reports
+### Opening a Saved Report
 
-**Save Report:**
-- Menu: File > Save Report
-- Keyboard: Ctrl/Cmd+S
-- Saves to local database
+1. Click **File** in the top menu
+2. Click **Open Report**
+3. Select the report you want to open
+4. Click **Open**
 
-**Load Report:**
-- Menu: File > Open Report
-- Keyboard: Ctrl/Cmd+O
-- Browse saved reports by date
+### Using the Fuel Converter
 
-### Exporting Reports
+1. Click **Fuel Converter** in the navigation menu
+2. Select your fuel type from the dropdown list
+3. Enter the amount
+4. See the energy calculation automatically
 
-**Export as PDF:**
-- Menu: File > Export as PDF
-- Keyboard: Ctrl/Cmd+E
-- Choose save location
-- Professional formatted PDF created
+### Using the Unit Converter
 
-**Export as JSON:**
-- Menu: File > Export as JSON
-- Save report data for backup or sharing
-- Can be imported later
+1. Click **Unit Converter** in the navigation menu
+2. Choose what type of measurement (Mass, Volume, Energy, etc.)
+3. Select what you're converting from and to
+4. Enter the amount
+5. See the result instantly
 
-### Importing Reports
+---
 
-**Import JSON:**
-- Menu: File > Import
-- Select JSON file previously exported
-- Data loaded into form
+## Your Data is Safe
 
-### Keyboard Shortcuts
+All your reports are saved on your computer only. Nothing is sent to the internet. You can:
+- Work without an internet connection
+- Keep your data completely private
+- Back up your reports by exporting them as files
 
-| Action | Windows/Linux | macOS |
-|--------|---------------|-------|
-| New Report | Ctrl+N | Cmd+N |
-| Open Report | Ctrl+O | Cmd+O |
-| Save Report | Ctrl+S | Cmd+S |
-| Export PDF | Ctrl+E | Cmd+E |
-| Quit | Alt+F4 | Cmd+Q |
+### Where Your Reports are Saved
 
-### Data Location
+**Mac:** Your reports are in a special folder at:
+`Library/Application Support/efrag-desktop/efrag.db`
 
-Your reports are stored locally at:
-- **macOS:** `~/Library/Application Support/efrag-desktop/efrag.db`
-- **Windows:** `%APPDATA%\efrag-desktop\efrag.db`
+**Windows:** Your reports are in a special folder at:
+`AppData\efrag-desktop\efrag.db`
 
-**Backup:** Simply copy the `efrag.db` file to backup all reports.
+To back up your reports, export them as PDF or JSON files.
 
-## For Developers
+---
 
-### Quick Setup
+## Keyboard Shortcuts
 
-```bash
-# Clone repository
-git clone <repo-url>
-cd EFRAG-app
+Make your work faster with these shortcuts:
 
-# Install dependencies
-npm install
+**Mac:**
+- **Cmd+N** - Create new report
+- **Cmd+O** - Open saved report
+- **Cmd+S** - Save current report
+- **Cmd+E** - Export as PDF
+- **Cmd+Q** - Quit application
 
-# Run in development mode
-npm run dev
+**Windows:**
+- **Ctrl+N** - Create new report
+- **Ctrl+O** - Open saved report
+- **Ctrl+S** - Save current report
+- **Ctrl+E** - Export as PDF
+- **Alt+F4** - Quit application
+
+---
+
+## Need Help?
+
+**App won't open on Mac?**
+Open Terminal and type:
 ```
-
-The app will launch in Electron with hot-reload enabled.
-
-### Development Workflow
-
-1. **Frontend changes:** Edit files in `src/` - auto-reload
-2. **Electron changes:** Edit `electron/main.ts` - restart app
-3. **Database changes:** Modify schema in `electron/main.ts` `initDatabase()`
-
-### Testing Changes
-
-```bash
-# Build and test
-npm run build:dir
-
-# Run the built app
-open release/mac-arm64/EFRAG\ Desktop.app
-```
-
-### Adding Features
-
-#### Add New Form Field
-1. Edit `src/components/VSMEForm.tsx`
-2. Add state variable
-3. Add input component
-4. Include in save/load logic
-
-#### Add New Menu Item
-1. Edit `electron/main.ts` in `createMenu()`
-2. Add menu item definition
-3. Create IPC handler if needed
-4. Add corresponding function in React
-
-#### Modify Database Schema
-1. Edit `electron/main.ts` in `initDatabase()`
-2. Consider migration for existing users
-3. Update types in `electron/preload.ts`
-
-### Building for Distribution
-
-```bash
-# Build for current platform
-npm run build
-
-# Build for macOS
-npm run build:mac
-
-# Build for Windows
-npm run build:win
-```
-
-See `BUILD.md` for detailed build instructions.
-
-## Troubleshooting
-
-### App Won't Launch (macOS)
-```bash
-# Remove quarantine flag
 xattr -cr "/Applications/EFRAG Desktop.app"
 ```
+Then press Enter and try opening the app again.
 
-### Database Locked Error
-- Close all instances of the app
-- Restart the application
-- If persists, delete `.db-shm` and `.db-wal` files
+**App won't open on Windows?**
+Right-click the installer and select "Run as administrator".
 
-### Missing Reports
-- Check data location (see above)
-- Restore from backup if available
-- Check for multiple installations
+**Lost your reports?**
+Check the File menu and click "Open Report" to see all saved reports.
 
-### Export Fails
-- Ensure write permissions for target directory
-- Check disk space
-- Try different save location
+**Want to move reports to another computer?**
+Export each report as a JSON file, then import them on the other computer.
 
-## Getting Help
+---
 
-- **Issues:** Report bugs on GitHub Issues
-- **Documentation:** See README.md and BUILD.md
-- **Updates:** Check for new releases regularly
+## Questions?
 
-## Tips
+For more information about what EFRAG Desktop can do, see the [main README](README.md).
 
-1. **Regular Backups:** Export important reports as JSON or copy database file
-2. **Use Keyboard Shortcuts:** Faster workflow with shortcuts
-3. **Auto-Save:** Click save frequently to prevent data loss
-4. **PDF for Sharing:** Use PDF export for final reports
-5. **JSON for Backup:** Export all reports as JSON regularly
+For technical issues, please contact support or visit our GitHub page.
