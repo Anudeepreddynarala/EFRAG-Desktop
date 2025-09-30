@@ -30,6 +30,7 @@ import { MatrixInput } from "@/components/ui/matrix-input";
 import { RepeatableSection } from "@/components/ui/repeatable-section";
 import { exportAsXBRL } from "@/utils/xbrlExport";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function VSMEForm() {
   const [formData, setFormData] = useState<Record<string, any>>({});
@@ -61,6 +62,11 @@ export function VSMEForm() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-5xl mx-auto space-y-8">
+        {/* Theme Toggle - Top Right */}
+        <div className="flex justify-end">
+          <ThemeToggle />
+        </div>
+
         {/* Header */}
         <div className="text-center py-10 space-y-4">
           <h1 className="text-4xl font-bold text-foreground mb-3 tracking-tight">
