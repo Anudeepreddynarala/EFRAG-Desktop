@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, ExternalLink, AlertCircle, FileCode } from "lucide-react";
+import { CalendarIcon, ExternalLink, AlertCircle, FileCode, Sparkles } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -32,6 +32,8 @@ import { RepeatableSection } from "@/components/ui/repeatable-section";
 import { exportAsXBRL } from "@/utils/xbrlExport";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { AISetupWizard } from "@/components/AIAssistant/AISetupWizard";
+import { LLMBackend } from "@/types/ai.types";
 
 export function VSMEForm() {
   const navigate = useNavigate();
@@ -39,6 +41,8 @@ export function VSMEForm() {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [activeTab, setActiveTab] = useState<string>("section1");
+  const [showAIWizard, setShowAIWizard] = useState(false);
+  const [aiConnected, setAIConnected] = useState(false);
 
   const updateFormData = (key: string, value: any) => {
     setFormData(prev => ({ ...prev, [key]: value }));
@@ -59,6 +63,13 @@ export function VSMEForm() {
       console.error('Error exporting XBRL:', error);
       alert('Error exporting XBRL file. Please try again.');
     }
+  };
+
+  const handleAIComplete = (backend: LLMBackend, modelName: string) => {
+    setShowAIWizard(false);
+    setAIConnected(true);
+    console.log(`AI Connected: ${backend} - ${modelName}`);
+    // TODO: Open document upload interface
   };
 
   return (
@@ -82,7 +93,33 @@ export function VSMEForm() {
               This template is designed to align with the EFRAG VSME Standard for digital sustainability reporting.
             </p>
           </div>
+
+          {/* AI Assistant Button - EXPERIMENTAL */}
+          <div className="mt-6">
+            <Button
+              onClick={() => setShowAIWizard(true)}
+              size="lg"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg"
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              Use AI Assistant (Experimental)
+            </Button>
+            {aiConnected && (
+              <p className="text-sm text-green-600 mt-2">✓ AI Connected - Ready to assist</p>
+            )}
+            <p className="text-xs text-muted-foreground mt-2">
+              🔒 100% Local Processing - Your data never leaves your computer
+            </p>
+          </div>
         </div>
+
+        {/* AI Setup Wizard Modal */}
+        {showAIWizard && (
+          <AISetupWizard
+            onClose={() => setShowAIWizard(false)}
+            onComplete={handleAIComplete}
+          />
+        )}
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

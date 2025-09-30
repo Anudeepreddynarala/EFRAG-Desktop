@@ -1,6 +1,7 @@
 import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
 
@@ -266,6 +267,15 @@ ipcMain.handle('read-file', async (event, filePath: string) => {
   } catch (error: any) {
     return { success: false, error: error.message };
   }
+});
+
+// System info handlers for AI Assistant
+ipcMain.handle('get-total-memory', async () => {
+  return os.totalmem();
+});
+
+ipcMain.handle('get-free-memory', async () => {
+  return os.freemem();
 });
 
 app.on('ready', () => {

@@ -37,6 +37,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
 });
 
+// Expose system info APIs for AI Assistant
+contextBridge.exposeInMainWorld('electron', {
+  systemInfo: {
+    getTotalMemory: () => ipcRenderer.invoke('get-total-memory'),
+    getFreeMemory: () => ipcRenderer.invoke('get-free-memory'),
+  },
+});
+
 // Type definitions for TypeScript
 declare global {
   interface Window {
@@ -55,6 +63,12 @@ declare global {
       onMenuExportPDF: (callback: () => void) => void;
       onMenuExportJSON: (callback: () => void) => void;
       onMenuImport: (callback: () => void) => void;
+    };
+    electron?: {
+      systemInfo: {
+        getTotalMemory: () => Promise<number>;
+        getFreeMemory: () => Promise<number>;
+      };
     };
   }
 }
