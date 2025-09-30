@@ -1,7 +1,12 @@
 import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
+
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let mainWindow: BrowserWindow | null = null;
 let db: Database.Database | null = null;
@@ -95,6 +100,13 @@ function createMenu() {
           label: 'Export as JSON',
           click: () => {
             mainWindow?.webContents.send('menu-export-json');
+          },
+        },
+        {
+          label: 'Export as XBRL',
+          accelerator: 'CmdOrCtrl+Shift+X',
+          click: () => {
+            mainWindow?.webContents.send('menu-export-xbrl');
           },
         },
         { type: 'separator' },

@@ -10,17 +10,17 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, ExternalLink, AlertCircle } from "lucide-react";
+import { CalendarIcon, ExternalLink, AlertCircle, FileCode } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { DynamicGrid } from "@/components/ui/dynamic-grid";
-import { 
-  countries, 
-  currencies, 
-  entityIdentifierTypes, 
-  legalForms, 
+import {
+  countries,
+  currencies,
+  entityIdentifierTypes,
+  legalForms,
   disclosuresList,
   sustainabilityIssues
 } from "@/data/countries";
@@ -28,14 +28,32 @@ import { NACESelector } from "@/components/NACESelector";
 import { PollutantSelector } from "@/components/PollutantSelector";
 import { MatrixInput } from "@/components/ui/matrix-input";
 import { RepeatableSection } from "@/components/ui/repeatable-section";
+import { exportAsXBRL } from "@/utils/xbrlExport";
 
 export function VSMEForm() {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
-  
+
   const updateFormData = (key: string, value: any) => {
     setFormData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleExportXBRL = async () => {
+    try {
+      // Prepare data with dates
+      const exportData = {
+        ...formData,
+        reportingPeriodStart: startDate ? format(startDate, 'yyyy-MM-dd') : '',
+        reportingPeriodEnd: endDate ? format(endDate, 'yyyy-MM-dd') : '',
+      };
+
+      await exportAsXBRL(exportData);
+      alert('XBRL file exported successfully!');
+    } catch (error) {
+      console.error('Error exporting XBRL:', error);
+      alert('Error exporting XBRL file. Please try again.');
+    }
   };
 
   return (
@@ -3230,6 +3248,34 @@ export function VSMEForm() {
               <span className="mr-2">📏</span>
               Unit of Measurement Converter
             </Button>
+          </div>
+        </FormSection>
+
+        {/* Export Section */}
+        <FormSection title="Export Options" subtitle="Export your completed report in various formats.">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={handleExportXBRL}
+              className="w-full sm:w-auto min-w-[200px]"
+            >
+              <FileCode className="mr-2 h-5 w-5" />
+              Export as XBRL
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full sm:w-auto min-w-[200px]"
+            >
+              <span className="mr-2">📄</span>
+              Export as PDF
+            </Button>
+          </div>
+          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <p className="text-sm text-blue-900 dark:text-blue-100">
+              <strong>XBRL Export:</strong> Generate a machine-readable XBRL file that complies with EFRAG VSME taxonomy for digital sustainability reporting.
+            </p>
           </div>
         </FormSection>
 
