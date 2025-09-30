@@ -59,18 +59,18 @@ export function VSMEForm() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-5xl mx-auto space-y-8">
         {/* Header */}
-        <div className="text-center py-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
+        <div className="text-center py-10 space-y-4">
+          <h1 className="text-4xl font-bold text-foreground mb-3 tracking-tight">
             VSME Digital Template
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-[1.0625rem] text-muted-foreground leading-relaxed">
             Voluntary Sustainability Reporting Standard for Medium-sized Entities
           </p>
-          <div className="mt-4 p-3 bg-accent/20 rounded-lg border border-accent/30">
-            <p className="text-sm text-accent-foreground">
+          <div className="mt-6 p-5 bg-accent/20 rounded-xl border-2 border-accent/30 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <p className="text-[0.9375rem] text-accent-foreground leading-relaxed">
               This template is designed to align with the EFRAG VSME Standard for digital sustainability reporting.
             </p>
           </div>
@@ -78,7 +78,7 @@ export function VSMEForm() {
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-5 gap-1">
             <TabsTrigger value="section1">General Info</TabsTrigger>
             <TabsTrigger value="section2">Environmental</TabsTrigger>
             <TabsTrigger value="section3">Social</TabsTrigger>
@@ -87,7 +87,7 @@ export function VSMEForm() {
           </TabsList>
 
           {/* Section 1: General Information */}
-          <TabsContent value="section1" className="space-y-6">
+          <TabsContent value="section1" className="space-y-8 mt-6">
             <FormSection title="Section 1: General Information">
           
           {/* Subsection: Information on the report necessary for XBRL */}
