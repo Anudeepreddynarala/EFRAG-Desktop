@@ -29,11 +29,13 @@ import { PollutantSelector } from "@/components/PollutantSelector";
 import { MatrixInput } from "@/components/ui/matrix-input";
 import { RepeatableSection } from "@/components/ui/repeatable-section";
 import { exportAsXBRL } from "@/utils/xbrlExport";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function VSMEForm() {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+  const [activeTab, setActiveTab] = useState<string>("section1");
 
   const updateFormData = (key: string, value: any) => {
     setFormData(prev => ({ ...prev, [key]: value }));
@@ -74,8 +76,19 @@ export function VSMEForm() {
           </div>
         </div>
 
-        {/* Section 1: General Information */}
-        <FormSection title="Section 1: General Information">
+        {/* Tabs Navigation */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="section1">General Info</TabsTrigger>
+            <TabsTrigger value="section2">Environmental</TabsTrigger>
+            <TabsTrigger value="section3">Social</TabsTrigger>
+            <TabsTrigger value="section4">Governance</TabsTrigger>
+            <TabsTrigger value="converters">Converters</TabsTrigger>
+          </TabsList>
+
+          {/* Section 1: General Information */}
+          <TabsContent value="section1" className="space-y-6">
+            <FormSection title="Section 1: General Information">
           
           {/* Subsection: Information on the report necessary for XBRL */}
           <Subsection title="Information on the report necessary for XBRL">
@@ -711,9 +724,11 @@ export function VSMEForm() {
           </Subsection>
 
         </FormSection>
+          </TabsContent>
 
-        {/* Section 2: Environmental Disclosures */}
-        <FormSection title="Section 2: Environmental Disclosures">
+          {/* Section 2: Environmental Disclosures */}
+          <TabsContent value="section2" className="space-y-6">
+            <FormSection title="Section 2: Environmental Disclosures">
           
           {/* B3 - Total Energy Consumption */}
           <Subsection title="B3 – Total Energy Consumption">
@@ -1972,9 +1987,11 @@ export function VSMEForm() {
           </Subsection>
 
         </FormSection>
+          </TabsContent>
 
-        {/* Section 3: Social Disclosures */}
-        <FormSection title="Section 3: Social Disclosures">
+          {/* Section 3: Social Disclosures */}
+          <TabsContent value="section3" className="space-y-6">
+            <FormSection title="Section 3: Social Disclosures">
           
           {/* Employee Counting Methodology - Retrieved from B1 */}
           <Subsection title="Employee Counting Methodology (from General Information)">
@@ -2794,9 +2811,11 @@ export function VSMEForm() {
           </Subsection>
 
         </FormSection>
+          </TabsContent>
 
-        {/* Section 4: Governance Disclosures */}
-        <FormSection title="Section 4: Governance Disclosures">
+          {/* Section 4: Governance Disclosures */}
+          <TabsContent value="section4" className="space-y-6">
+            <FormSection title="Section 4: Governance Disclosures">
           
           {/* B11 – Convictions and fines for corruption and bribery */}
           <Subsection title="B11 – Convictions and fines for corruption and bribery [If applicable]">
@@ -3226,58 +3245,62 @@ export function VSMEForm() {
           </Subsection>
 
         </FormSection>
+          </TabsContent>
 
-        {/* Converter Tools Section */}
-        <FormSection title="Converter Tools" subtitle="Access helpful conversion tools to support your reporting.">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => window.open('/fuel-converter', '_blank')}
-              className="w-full sm:w-auto min-w-[200px]"
-            >
-              <span className="mr-2">🔥</span>
-              Fuel Converter
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => window.open('/unit-converter', '_blank')}
-              className="w-full sm:w-auto min-w-[200px]"
-            >
-              <span className="mr-2">📏</span>
-              Unit of Measurement Converter
-            </Button>
-          </div>
-        </FormSection>
+          {/* Converter Tools Tab */}
+          <TabsContent value="converters" className="space-y-6">
+            <FormSection title="Converter Tools" subtitle="Access helpful conversion tools to support your reporting.">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => window.open('/fuel-converter', '_blank')}
+                  className="w-full sm:w-auto min-w-[200px]"
+                >
+                  <span className="mr-2">🔥</span>
+                  Fuel Converter
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => window.open('/unit-converter', '_blank')}
+                  className="w-full sm:w-auto min-w-[200px]"
+                >
+                  <span className="mr-2">📏</span>
+                  Unit of Measurement Converter
+                </Button>
+              </div>
+            </FormSection>
 
-        {/* Export Section */}
-        <FormSection title="Export Options" subtitle="Export your completed report in various formats.">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={handleExportXBRL}
-              className="w-full sm:w-auto min-w-[200px]"
-            >
-              <FileCode className="mr-2 h-5 w-5" />
-              Export as XBRL
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto min-w-[200px]"
-            >
-              <span className="mr-2">📄</span>
-              Export as PDF
-            </Button>
-          </div>
-          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-blue-900 dark:text-blue-100">
-              <strong>XBRL Export:</strong> Generate a machine-readable XBRL file that complies with EFRAG VSME taxonomy for digital sustainability reporting.
-            </p>
-          </div>
-        </FormSection>
+            {/* Export Section within Converters Tab */}
+            <FormSection title="Export Options" subtitle="Export your completed report in various formats.">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={handleExportXBRL}
+                  className="w-full sm:w-auto min-w-[200px]"
+                >
+                  <FileCode className="mr-2 h-5 w-5" />
+                  Export as XBRL
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto min-w-[200px]"
+                >
+                  <span className="mr-2">📄</span>
+                  Export as PDF
+                </Button>
+              </div>
+              <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  <strong>XBRL Export:</strong> Generate a machine-readable XBRL file that complies with EFRAG VSME taxonomy for digital sustainability reporting.
+                </p>
+              </div>
+            </FormSection>
+          </TabsContent>
+        </Tabs>
 
         {/* Save/Continue Section */}
         <div className="flex justify-between items-center py-6 border-t border-form-border">
