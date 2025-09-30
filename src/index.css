@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* EFRAG-inspired professional color system */
+    --background: 142 76% 96%;
+    --foreground: 210 11% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 11% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 11% 15%;
+
+    /* Orange primary from EFRAG */
+    --primary: 13 95% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 140 10% 92%;
+    --secondary-foreground: 210 11% 15%;
+
+    --muted: 140 10% 95%;
+    --muted-foreground: 210 11% 45%;
+
+    /* Professional green accent */
+    --accent: 142 52% 85%;
+    --accent-foreground: 142 52% 25%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 140 10% 88%;
+    --input: 0 0% 100%;
+    --ring: 13 95% 60%;
+
+    /* VSME specific colors */
+    --vsme-primary: 13 95% 60%;
+    --vsme-secondary: 142 52% 55%;
+    --vsme-mint: 142 76% 96%;
+    --vsme-success: 142 71% 45%;
+    --vsme-warning: 35 91% 65%;
+    
+    /* Form specific */
+    --form-bg: 0 0% 100%;
+    --form-border: 140 10% 88%;
+    --tooltip-bg: 210 11% 15%;
+    --tooltip-text: 0 0% 100%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 210 11% 8%;
+    --foreground: 210 11% 92%;
+
+    --card: 210 11% 12%;
+    --card-foreground: 210 11% 92%;
+
+    --popover: 210 11% 12%;
+    --popover-foreground: 210 11% 92%;
+
+    --primary: 13 95% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 11% 18%;
+    --secondary-foreground: 210 11% 92%;
+
+    --muted: 210 11% 15%;
+    --muted-foreground: 210 11% 65%;
+
+    --accent: 142 52% 35%;
+    --accent-foreground: 142 52% 85%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 11% 18%;
+    --input: 210 11% 15%;
+    --ring: 13 95% 60%;
+
+    /* VSME dark colors */
+    --vsme-primary: 13 95% 60%;
+    --vsme-secondary: 142 52% 45%;
+    --vsme-mint: 210 11% 8%;
+    --vsme-success: 142 71% 45%;
+    --vsme-warning: 35 91% 65%;
+    
+    --form-bg: 210 11% 12%;
+    --form-border: 210 11% 18%;
+    --tooltip-bg: 210 11% 92%;
+    --tooltip-text: 210 11% 8%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
