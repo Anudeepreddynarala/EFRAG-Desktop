@@ -6,18 +6,22 @@ Get started with EFRAG Desktop in minutes. Simply download the version for your 
 
 ### For Mac Users
 
-**Do you have a newer Mac (2020 or later)?**
+**For newer Macs with Apple M1/M2/M3 chips (2020 or later):**
 - [Download for Mac (Apple Silicon)](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG-Desktop-1.0.0-arm64.dmg)
 
-**Do you have an older Mac (before 2020)?**
+**For older Macs with Intel chips (2019 or earlier):**
 - [Download for Mac (Intel)](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG-Desktop-1.0.0-x64.dmg)
 
-**Not sure which one you have?**
-Click the Apple logo () in the top-left corner of your screen, then click "About This Mac". If it says "Apple M1", "M2", or "M3", download Apple Silicon. If it says "Intel", download Intel.
+**Check your Mac type:**
+Click the Apple logo () in the top-left corner, then "About This Mac". If it says "Apple M1", "M2", or "M3", you have Apple Silicon. If it says "Intel Core", you have an Intel Mac.
 
 ### For Windows Users
 
-- [Download for Windows](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG-Desktop-Setup-1.0.0.exe)
+**Installer (Recommended):**
+- [Download Windows Installer](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG.Desktop.Setup.1.0.0.exe)
+
+**Portable Version (No installation required):**
+- [Download Windows Portable](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG.Desktop.1.0.0.exe)
 
 Works with Windows 10 and Windows 11.
 
