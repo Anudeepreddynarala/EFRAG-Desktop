@@ -14,10 +14,10 @@ Get started with EFRAG Desktop in minutes. Simply download the version for your 
 ### For Windows Users
 
 **Installer (Recommended):**
-- [Download Windows Installer](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG.Desktop.Setup.1.0.0.exe)
+- [Download Windows Installer](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/download/v1.0.1/EFRAG.Desktop.Setup.1.0.0.exe)
 
 **Portable Version (No installation required):**
-- [Download Windows Portable](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG.Desktop.1.0.0.exe)
+- [Download Windows Portable](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/download/v1.0.1/EFRAG.Desktop.1.0.0.exe)
 
 Works with Windows 10 and Windows 11.
 
