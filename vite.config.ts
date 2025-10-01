@@ -25,7 +25,12 @@ export default defineConfig(({ mode }) => ({
           build: {
             outDir: "dist-electron",
             rollupOptions: {
-              external: ["better-sqlite3"],
+              external: [
+                "better-sqlite3",
+                "pdf-parse",
+                "mammoth",
+                "xlsx"
+              ],
             },
           },
         },
