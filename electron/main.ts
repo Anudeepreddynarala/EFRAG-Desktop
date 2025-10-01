@@ -320,7 +320,26 @@ ipcMain.handle('select-files-for-ai', async () => {
       return undefined;
     }
 
-    return { filePaths: result.filePaths };
+    // Get file stats for each selected file
+    const filesWithStats = await Promise.all(
+      result.filePaths.map(async (filePath) => {
+        try {
+          const stats = await fs.promises.stat(filePath);
+          return {
+            path: filePath,
+            size: stats.size
+          };
+        } catch (error) {
+          console.error(`Error getting stats for ${filePath}:`, error);
+          return {
+            path: filePath,
+            size: 0
+          };
+        }
+      })
+    );
+
+    return { files: filesWithStats };
   } catch (error: any) {
     console.error('Error selecting files:', error);
     throw new Error(`Failed to select files: ${error.message}`);

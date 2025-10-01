@@ -68,7 +68,7 @@ declare global {
       writeFile: (filePath: string, content: string) => Promise<any>;
       readFile: (filePath: string) => Promise<any>;
       readFileBuffer: (filePath: string) => Promise<Buffer>;
-      selectFilesForAI: () => Promise<{ filePaths: string[] } | undefined>;
+      selectFilesForAI: () => Promise<{ files: { path: string; size: number }[] } | undefined>;
       writeTempFile: (buffer: ArrayBuffer, originalName: string) => Promise<{ success: boolean; path?: string; error?: string }>;
       processDocument: (filePath: string) => Promise<{ success: boolean; content?: string; error?: string }>;
       onMenuNewReport: (callback: () => void) => void;

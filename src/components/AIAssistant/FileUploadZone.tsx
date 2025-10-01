@@ -193,11 +193,11 @@ export function FileUploadZone({ files, onFilesChange, maxFiles = 10 }: FileUplo
       const result = await window.electronAPI.selectFilesForAI();
       console.log('🔵 selectFilesForAI result:', result);
 
-      if (result && result.filePaths && result.filePaths.length > 0) {
-        const newFiles: UploadedFile[] = result.filePaths.map((filePath, index) => {
-          const fileName = filePath.split(/[\\/]/).pop() || filePath;
+      if (result && result.files && result.files.length > 0) {
+        const newFiles: UploadedFile[] = result.files.map((file, index) => {
+          const fileName = file.path.split(/[\\/]/).pop() || file.path;
           // Determine file type from extension
-          const ext = filePath.split('.').pop()?.toLowerCase() || '';
+          const ext = file.path.split('.').pop()?.toLowerCase() || '';
           const typeMap: Record<string, string> = {
             'pdf': 'application/pdf',
             'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -210,9 +210,9 @@ export function FileUploadZone({ files, onFilesChange, maxFiles = 10 }: FileUplo
           return {
             id: `${Date.now()}-${index}`,
             name: fileName,
-            size: 0, // Will be determined when processing
+            size: file.size,
             type: typeMap[ext] || '',
-            path: filePath
+            path: file.path
           };
         });
 
