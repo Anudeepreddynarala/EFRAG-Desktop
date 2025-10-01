@@ -2,6 +2,15 @@
 
 A desktop application for sustainability reporting following EFRAG (European Financial Reporting Advisory Group) standards.
 
+## 📥 Download
+
+**[→ Download EFRAG Desktop](QUICKSTART.md)** - Get started in minutes
+
+- ✅ Windows 10/11 (x64)
+- ✅ macOS (Apple Silicon & Intel)
+- ✅ Offline-first, local data storage
+- ✅ Free and open source
+
 ## What is EFRAG Desktop?
 
 EFRAG Desktop helps companies create sustainability reports that meet European reporting standards. It's a simple application that runs on your computer (Windows or Mac) without needing an internet connection.
