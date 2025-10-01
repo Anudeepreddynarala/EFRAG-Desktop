@@ -6,14 +6,10 @@ Get started with EFRAG Desktop in minutes. Simply download the version for your 
 
 ### For Mac Users
 
-**For newer Macs with Apple M1/M2/M3 chips (2020 or later):**
+**For Macs with Apple M1/M2/M3 chips:**
 - [Download for Mac (Apple Silicon)](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG-Desktop-1.0.0-arm64.dmg)
 
-**For older Macs with Intel chips (2019 or earlier):**
-- [Download for Mac (Intel)](https://github.com/Anudeepreddynarala/EFRAG-Desktop/releases/latest/download/EFRAG-Desktop-1.0.0-x64.dmg)
-
-**Check your Mac type:**
-Click the Apple logo () in the top-left corner, then "About This Mac". If it says "Apple M1", "M2", or "M3", you have Apple Silicon. If it says "Intel Core", you have an Intel Mac.
+**Note:** Intel Mac builds are not currently available. Apple Silicon Macs (M1/M2/M3) are supported.
 
 ### For Windows Users
 
