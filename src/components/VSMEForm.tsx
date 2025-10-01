@@ -32,8 +32,7 @@ import { RepeatableSection } from "@/components/ui/repeatable-section";
 import { exportAsXBRL } from "@/utils/xbrlExport";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { AISetupWizard } from "@/components/AIAssistant/AISetupWizard";
-import { LLMBackend } from "@/types/ai.types";
+import { AIAssistant } from "@/components/AIAssistant/AIAssistant";
 
 export function VSMEForm() {
   const navigate = useNavigate();
@@ -41,8 +40,7 @@ export function VSMEForm() {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [activeTab, setActiveTab] = useState<string>("section1");
-  const [showAIWizard, setShowAIWizard] = useState(false);
-  const [aiConnected, setAIConnected] = useState(false);
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
 
   const updateFormData = (key: string, value: any) => {
     setFormData(prev => ({ ...prev, [key]: value }));
@@ -65,11 +63,8 @@ export function VSMEForm() {
     }
   };
 
-  const handleAIComplete = (backend: LLMBackend, modelName: string) => {
-    setShowAIWizard(false);
-    setAIConnected(true);
-    console.log(`AI Connected: ${backend} - ${modelName}`);
-    // TODO: Open document upload interface
+  const handleApplyAIData = (data: Record<string, any>) => {
+    setFormData(prev => ({ ...prev, ...data }));
   };
 
   return (
@@ -94,32 +89,28 @@ export function VSMEForm() {
             </p>
           </div>
 
-          {/* AI Assistant Button - EXPERIMENTAL */}
+          {/* AI Assistant Button */}
           <div className="mt-6">
             <Button
-              onClick={() => setShowAIWizard(true)}
+              onClick={() => setShowAIAssistant(true)}
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg"
             >
               <Sparkles className="w-5 h-5 mr-2" />
-              Use AI Assistant (Experimental)
+              Use AI Assistant
             </Button>
-            {aiConnected && (
-              <p className="text-sm text-green-600 mt-2">✓ AI Connected - Ready to assist</p>
-            )}
             <p className="text-xs text-muted-foreground mt-2">
-              🔒 100% Local Processing - Your data never leaves your computer
+              🤖 Powered by ChatGPT - Upload documents to auto-fill your form
             </p>
           </div>
         </div>
 
-        {/* AI Setup Wizard Modal */}
-        {showAIWizard && (
-          <AISetupWizard
-            onClose={() => setShowAIWizard(false)}
-            onComplete={handleAIComplete}
-          />
-        )}
+        {/* AI Assistant Modal */}
+        <AIAssistant
+          open={showAIAssistant}
+          onClose={() => setShowAIAssistant(false)}
+          onApplyData={handleApplyAIData}
+        />
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -2046,7 +2037,7 @@ export function VSMEForm() {
                 tooltip="This value is retrieved from the B1 General Information section."
               >
                 <Input
-                  value={formData.employeeCountingMethodologyType || 'Not specified'}
+                  value={formData.employeeCountingType === 'fte' ? 'Full-time equivalent (FTE)' : formData.employeeCountingType === 'headcount' ? 'Headcount' : 'Not specified'}
                   readOnly
                   className="bg-background"
                 />
@@ -2057,7 +2048,7 @@ export function VSMEForm() {
                 tooltip="This value is retrieved from the B1 General Information section."
               >
                 <Input
-                  value={formData.employeeCountingMethodologyTiming || 'Not specified'}
+                  value={formData.employeeCountingTiming === 'end-of-period' ? 'At the end of reporting period' : formData.employeeCountingTiming === 'average' ? 'As an average during the reporting period' : 'Not specified'}
                   readOnly
                   className="bg-background"
                 />
@@ -2123,32 +2114,6 @@ export function VSMEForm() {
           <Subsection title="B8 – Workforce – General characteristics - Gender [Always to be reported]">
             <div className="space-y-4">
               <div className="space-y-4">
-                <div className="grid grid-cols-1 gap-4 mb-2">
-                  <TooltipField
-                    label="Employee counting methodology for the disclosures below (Type)"
-                    tooltip="This value is displayed from B1 Basis for Preparation."
-                  >
-                    <Input
-                      type="text"
-                      value={formData.employeeCountingType === 'fte' ? 'Full-time equivalent (FTE)' : formData.employeeCountingType === 'headcount' ? 'Headcount' : 'Not specified'}
-                      readOnly
-                      className="bg-muted"
-                    />
-                  </TooltipField>
-
-                  <TooltipField
-                    label="Employee counting methodology for the disclosures below (Timing)"
-                    tooltip="This value is displayed from B1 Basis for Preparation."
-                  >
-                    <Input
-                      type="text"
-                      value={formData.employeeCountingTiming === 'end-of-period' ? 'At the end of reporting period' : formData.employeeCountingTiming === 'average' ? 'As an average during the reporting period' : 'Not specified'}
-                      readOnly
-                      className="bg-muted"
-                    />
-                  </TooltipField>
-                </div>
-
                 <div className="grid grid-cols-4 gap-4">
                   <TooltipField
                     label="Male employees"
