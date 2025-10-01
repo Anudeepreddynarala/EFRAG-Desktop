@@ -3,7 +3,51 @@
 ## Current Status
 - **Branch**: `main`
 - **Version**: 1.0.0
-- **Last Updated**: 2025-09-30
+- **Last Updated**: 2025-10-01
+
+## ✅ AI Assistant Feature - IMPLEMENTED (2025-10-01)
+
+The ChatGPT-powered AI Assistant for automatic form filling is now **fully implemented** and ready for testing.
+
+### What Was Built
+
+**Complete End-to-End Flow:**
+1. User clicks "Use AI Assistant" button in VSME form
+2. API key setup (one-time) with connection testing
+3. File upload via drag & drop or native file picker (PDF, DOCX, XLSX, CSV, TXT, JSON)
+4. Optional user instructions for context
+5. Document processing and AI analysis via ChatGPT
+6. Review panel with confidence scores, source citations, and exact quotes
+7. Accept/Edit/Reject workflow for each extracted field
+8. Automatic form population with approved data
+
+**Key Features Implemented:**
+- ✅ Secure encrypted API key storage
+- ✅ Multi-format document processing (PDF, Word, Excel, CSV, text)
+- ✅ ChatGPT integration (GPT-4 Turbo, GPT-4o, GPT-3.5)
+- ✅ Cost estimation before processing
+- ✅ Zero-hallucination extraction (only explicit facts)
+- ✅ Source attribution with exact quotes and page numbers
+- ✅ Confidence scoring (HIGH/MEDIUM/LOW)
+- ✅ Field-by-field review and approval
+- ✅ Token usage and cost tracking
+- ✅ Progress indicators and error handling
+
+**Files Created/Modified:**
+- 7 new service/utility files
+- 5 new UI components
+- Electron IPC handlers for file operations
+- VSMEForm integration
+- Comprehensive TypeScript types
+
+**Dependencies Added:**
+- `openai ^6.0.0` - ChatGPT API integration
+- `pdf-parse ^1.1.1` - PDF text extraction
+- `mammoth ^1.11.0` - DOCX text extraction
+- `xlsx ^0.18.5` - Excel/CSV parsing
+- `crypto-js ^4.2.0` - API key encryption
+
+See implementation details below ⬇️
 
 ## Build System
 
@@ -71,45 +115,58 @@ file release/mac-arm64/EFRAG\ Desktop.app/Contents/Resources/app.asar.unpacked/n
 
 ## Planned Feature Status
 - **Branch**: TBD (not yet started)
-- **Feature**: Experimental AI-powered form autofill functionality
+- **Feature**: ChatGPT API-powered form autofill functionality
 - **Priority**: Future enhancement
 
 ## Feature Overview
-Add an experimental feature that allows users to:
-1. Download a local LLM (not packaged with app)
-2. Upload files or paste text to the AI
-3. Auto-fill VSME sustainability reporting form
-4. Get feedback on what was identified and what needs attention
+Add a feature that allows users to:
+1. Configure their OpenAI API key
+2. Upload files (PDF, DOCX, TXT, CSV, Excel) to the AI assistant
+3. Provide additional instructions/context
+4. Auto-fill VSME sustainability reporting form using ChatGPT
+5. Review what was identified and what needs attention
 
 ## Implementation Plan
 
 ### Phase 1: UI/UX Design
-- [ ] Add "Use AI" button/link in the VSME form
-- [ ] Create AI setup wizard/modal with instructions
-- [ ] Design file upload interface
-- [ ] Design text paste interface
+- [ ] Add "Use AI Assistant" button in the VSME form
+- [ ] Create API key configuration interface (with secure storage)
+- [ ] Design file upload interface (drag & drop + file picker)
+  - Support multiple files
+  - Show file list with remove option
+  - Display file size limits
+- [ ] Design text instruction interface (additional context for AI)
 - [ ] Create feedback/review panel showing:
-  - What the AI identified
+  - What the AI identified from documents
   - What fields were filled
+  - Source citations for each filled field
   - What needs user attention/review
 
-### Phase 2: Local LLM Integration
-- [ ] Research recommended local LLM options (Ollama, LM Studio, etc.)
-- [ ] Create setup guide for chosen LLM
-- [ ] Implement LLM communication layer (likely REST API)
-- [ ] Handle LLM connection status
-- [ ] Error handling for when LLM is not running
+### Phase 2: ChatGPT API Integration
+- [ ] Implement secure API key storage (encrypted in local DB)
+- [ ] Create OpenAI API service layer
+- [ ] Use GPT-4 with vision for document analysis (supports images of documents)
+- [ ] Use Assistants API with file uploads for multi-document processing
+- [ ] Handle API errors (invalid key, rate limits, network issues)
+- [ ] Add loading states and progress indicators
 
 ### Phase 3: Document Processing
-- [ ] Implement file upload functionality
-- [ ] Support common document formats (PDF, TXT, CSV, etc.)
+- [ ] Implement file upload functionality (Electron IPC)
+- [ ] Support document formats:
+  - PDF (text extraction + OCR for images)
+  - DOCX/DOC (Microsoft Word)
+  - TXT (plain text)
+  - CSV/Excel (tabular data)
+  - Images (JPG, PNG) via vision API
 - [ ] Extract text from uploaded documents
-- [ ] Implement text paste functionality
-- [ ] Prepare context/prompts for LLM
+- [ ] Prepare files for ChatGPT upload
+- [ ] Create context/prompts for GPT
 
 ### Phase 4: Form Auto-fill Logic
 - [ ] Design prompt engineering for VSME form fields
-- [ ] Map LLM responses to form fields
+- [ ] Send form schema + documents + user instructions to ChatGPT
+- [ ] Parse structured JSON response from GPT
+- [ ] Map GPT responses to form fields
 - [ ] Implement field population logic
 - [ ] Add validation layer
 - [ ] Track what was auto-filled vs. manual
@@ -117,9 +174,10 @@ Add an experimental feature that allows users to:
 ### Phase 5: Feedback System
 - [ ] Create confidence scoring for auto-filled fields
 - [ ] Highlight fields needing review
-- [ ] Show extraction summary
-- [ ] Allow users to accept/reject suggestions
+- [ ] Show extraction summary with sources
+- [ ] Allow users to accept/reject/modify suggestions
 - [ ] Provide explanations for field mappings
+- [ ] Show API usage costs (token count)
 
 ## CRITICAL: AI Behavior Rules
 
@@ -182,93 +240,225 @@ Add an experimental feature that allows users to:
 
 ### Phase 6: Testing & Polish
 - [ ] Test with various document types
-- [ ] Test with different LLM models
+- [ ] Test with different API key scenarios
 - [ ] Error handling improvements
 - [ ] Performance optimization
 - [ ] User documentation
 
 ## Technical Considerations
 
-### Recommended LLM Approach - 100% LOCAL PROCESSING
-**All data stays on user's computer - zero external API calls**
+### ChatGPT API Approach
+**Uses OpenAI API for intelligent document processing**
 
-#### Multi-Tier Model Support (auto-detected based on RAM)
-**Models specifically chosen for data extraction performance:**
-- **Tier 1 (4-8GB RAM)**: Qwen 2.5 3B (2.0GB) or Gemma 2B (1.7GB)
-  - Qwen 3B beats even Llama 70B at extraction tasks
-- **Tier 2 (8-16GB RAM)**: Mistral 7B (4.4GB) or Qwen 2.5 7B (4.7GB)
-  - Mistral: Best for structured data extraction (fast & precise)
-  - Qwen: Superior extraction with hybrid reasoning modes
-- **Tier 3 (16GB+ RAM)**: Qwen 2.5 14B (8.2GB) or Mistral Nemo 12B (7.1GB)
-  - Maximum accuracy for complex sustainability reports
+#### Model Selection
+- **Primary**: GPT-4 Turbo (gpt-4-turbo-preview)
+  - Best for complex document analysis
+  - 128K context window (handles large documents)
+  - Vision capabilities for image/PDF analysis
+- **Alternative**: GPT-4o (gpt-4o)
+  - Faster and cheaper than GPT-4 Turbo
+  - Excellent for structured data extraction
+- **Fallback**: GPT-3.5 Turbo
+  - If user wants lower cost option
 
-#### Supported LLM Backends (user choice)
-- **Ollama** (Primary): CLI-based, easy install, REST API, cross-platform
-- **LM Studio** (Alternative): GUI app, user-friendly, drag-and-drop models
-- **Jan** (Alternative): Fully offline ChatGPT-like interface
-
-All backends run 100% locally with no internet connection required.
+#### OpenAI Features to Use
+1. **Chat Completions API** - Main interface for form filling
+2. **Vision API** - For processing document images/scanned PDFs
+3. **Assistants API** - For multi-document context management
+4. **File Upload API** - Direct file processing by OpenAI
+5. **Function Calling** - Structured output for form fields
 
 ### Architecture
 ```
 EFRAG Desktop (Electron)
-    ↓
-Local LLM Server (Ollama/similar)
-    ↓ REST API
-Document → Extract Text → Send to LLM → Parse Response → Fill Form
+    ↓ API Key
+OpenAI API (ChatGPT)
+    ↓ JSON Response
+Document Upload → GPT Processing → Structured Data → Fill Form
 ```
 
 ### Data Privacy & Security
-- **100% local processing** - All AI computation happens on user's machine
-- **Zero external API calls** - No data ever sent to cloud/external servers
-- **Offline capable** - Works without internet connection after model download
-- **Sensitive data safe** - Sustainability reports may contain proprietary business data
-- **Model storage** - All AI models stored locally on user's disk
-- **No telemetry** - No usage data collected or transmitted
+- **API key encryption** - Stored encrypted in local SQLite DB
+- **User owns their data** - Documents sent to OpenAI with user consent
+- **No app telemetry** - We don't track what users send to OpenAI
+- **OpenAI privacy policy applies** - Users should review OpenAI's data policies
+- **Opt-in feature** - Users must explicitly enable and configure
+- **Clear warnings** - Inform users data will be sent to OpenAI
+- **API key security** - Never logged or transmitted except to OpenAI
 
 ### User Flow
-1. User clicks "Use AI" in VSME form
-2. If LLM not detected → Show setup instructions with download link
-3. If LLM running → Show upload/paste interface
-4. User provides documents/text
-5. AI processes and suggests form values
-6. User reviews suggestions in feedback panel
-7. User accepts/rejects/modifies before final submission
+1. User clicks "Use AI Assistant" in VSME form
+2. If no API key → Show API key setup modal
+   - Link to OpenAI API keys page
+   - Instructions on getting an API key
+   - Input field with masked display
+   - "Test Connection" button
+3. User uploads files (drag & drop or file picker)
+   - Show upload progress
+   - Display file list with sizes
+4. User provides additional instructions (optional text field)
+   - Example: "Focus on Q1 2024 data" or "Company name is Acme Corp"
+5. Click "Analyze Documents"
+   - Show progress: "Uploading files..." → "Analyzing..." → "Extracting data..."
+6. AI processes and returns suggestions
+7. User reviews in feedback panel
+   - See which fields were filled
+   - View source citations
+   - Accept/reject/modify each field
+8. User saves finalized form
 
 ## Files to Create/Modify
 
 ### New Files
-- `src/components/AIAssistant/AISetupWizard.tsx`
-- `src/components/AIAssistant/AIUploadInterface.tsx`
-- `src/components/AIAssistant/AIFeedbackPanel.tsx`
-- `src/services/llmService.ts`
-- `src/services/documentExtractor.ts`
-- `src/utils/formMapper.ts`
-- `src/types/ai.types.ts`
+- `src/components/AIAssistant/AIAssistant.tsx` - Main AI assistant modal
+- `src/components/AIAssistant/APIKeySetup.tsx` - API key configuration
+- `src/components/AIAssistant/FileUploadZone.tsx` - Drag & drop file upload
+- `src/components/AIAssistant/InstructionsInput.tsx` - User instruction text area
+- `src/components/AIAssistant/ReviewPanel.tsx` - Review extracted data
+- `src/services/openaiService.ts` - OpenAI API integration
+- `src/services/documentProcessor.ts` - File reading and processing
+- `src/services/apiKeyStorage.ts` - Secure API key encryption/storage
+- `src/utils/formMapper.ts` - Map GPT response to VSME form fields
+- `src/utils/promptTemplates.ts` - GPT prompt engineering
+- `src/types/ai.types.ts` - TypeScript types for AI feature
+- `electron/ipc/fileHandler.ts` - IPC for file operations
 
 ### Files to Modify
-- `src/components/VSMEForm.tsx` - Add AI integration
-- Main Electron process - Add file reading capabilities
-- Package.json - Add any necessary dependencies
+- `src/components/VSMEForm.tsx` - Add "Use AI Assistant" button
+- `src/database/schema.ts` - Add table for encrypted API keys
+- `electron/main.ts` - Add IPC handlers for file reading
+- `package.json` - Add dependencies
 
 ## Dependencies to Add
-- `pdf-parse` or `pdfjs-dist` - PDF text extraction
-- `mammoth` - DOCX support (if needed)
-- `axios` - HTTP client for LLM API calls
+```json
+{
+  "dependencies": {
+    "openai": "^4.20.0",
+    "pdf-parse": "^1.1.1",
+    "mammoth": "^1.6.0",
+    "xlsx": "^0.18.5",
+    "crypto-js": "^4.2.0"
+  }
+}
+```
+
+## Cost Estimation
+- **GPT-4 Turbo**: ~$10 per 1M input tokens, ~$30 per 1M output tokens
+- **GPT-4o**: ~$5 per 1M input tokens, ~$15 per 1M output tokens
+- **Typical form fill**: 5,000-20,000 input tokens (depending on document size)
+- **Estimated cost per form**: $0.05 - $0.50
 
 ## Notes
-- Keep the feature clearly marked as "Experimental"
-- Make it easy to enable/disable
+- Clearly inform users data will be sent to OpenAI
+- Show estimated cost before processing
 - Ensure all AI operations are non-blocking
 - Provide clear progress indicators
-- Keep setup steps minimal (goal: <3 steps to get running)
+- Allow users to cancel mid-processing
+- Cache API key securely (encrypted)
+- Handle API rate limits gracefully
 
-## Next Steps
-1. Finalize LLM choice (Ollama recommended)
-2. Create AI setup wizard UI
-3. Implement LLM connection service
-4. Build document upload/text paste interface
-5. Design prompt templates for form extraction
-6. Implement auto-fill logic
-7. Create feedback/review panel
-8. Test and iterate
+## Implementation Status (Updated 2025-10-01)
+
+### ✅ Completed Components
+
+#### Backend Services
+- **`src/types/ai.types.ts`** - Complete type definitions for ChatGPT API integration
+  - GPT model enums and configs
+  - Extracted field types with confidence levels and source citations
+  - AI analysis result structures
+  - VSME form field schema (40+ core fields)
+  - System prompt for EFRAG VSME extraction
+
+- **`src/services/apiKeyStorage.ts`** - Secure API key management
+  - AES encryption for API keys
+  - localStorage storage (TODO: migrate to SQLite)
+  - API key validation with OpenAI
+  - Last used tracking
+
+- **`src/services/documentProcessor.ts`** - Multi-format document processing
+  - PDF text extraction (pdf-parse)
+  - DOCX text extraction (mammoth)
+  - Excel/CSV parsing (xlsx)
+  - Plain text support
+  - File validation and size limits
+
+- **`src/services/openaiService.ts`** - OpenAI API integration
+  - Chat completions with GPT-4/GPT-4o/GPT-3.5
+  - Structured prompt building with EFRAG context
+  - JSON response parsing and validation
+  - Cost estimation before processing
+  - Progress callbacks
+
+#### UI Components
+- **`src/components/AIAssistant/APIKeySetup.tsx`** - API key configuration
+  - Masked API key input
+  - Connection testing
+  - Model selection (GPT-4 Turbo, GPT-4o, GPT-3.5)
+  - Privacy warnings with links to OpenAI policies
+
+- **`src/components/AIAssistant/FileUploadZone.tsx`** - File upload interface
+  - Drag & drop support
+  - Electron native file picker integration
+  - Multi-file support (up to 10 files)
+  - File type validation
+  - Size limit enforcement (10MB per file)
+
+- **`src/components/AIAssistant/InstructionsInput.tsx`** - User instructions input
+  - Optional context for AI
+  - Examples provided
+
+- **`src/components/AIAssistant/ReviewPanel.tsx`** - Extraction review interface
+  - Summary statistics (filled, not found, needs review)
+  - Confidence badges (HIGH/MEDIUM/LOW)
+  - Source citations with exact quotes
+  - Accept/Reject/Edit actions for each field
+  - Cost and token usage display
+  - Processing time tracking
+
+- **`src/components/AIAssistant/AIAssistant.tsx`** - Main orchestration component
+  - Multi-step wizard (API setup → Upload → Processing → Review)
+  - Progress indicators
+  - Cost estimation
+  - Error handling
+  - Integration with VSMEForm
+
+#### Electron Integration
+- **`electron/preload.ts`** - IPC bridge additions
+  - `readFileBuffer` - Read file as buffer for document processing
+  - `selectFilesForAI` - Native file picker for AI documents
+  - `processDocument` - Process documents in main process (PDF, DOCX, Excel)
+
+- **`electron/main.ts`** - IPC handler implementations
+  - File buffer reading with error handling
+  - Multi-file selection dialog with format filters
+  - Document processing with native modules (pdf-parse, mammoth, xlsx)
+  - Support for PDF, DOCX, DOC, XLSX, XLS, CSV, TXT, JSON formats
+
+#### Form Integration
+- **`src/components/VSMEForm.tsx`** - AI Assistant integration
+  - "Use AI Assistant" button in header
+  - Modal integration
+  - Form data application from AI results
+
+### ✅ Document Processing Fully Implemented (2025-10-01)
+
+**All document formats now supported via main process:**
+- ✅ **PDF files** - Text extraction using pdf-parse
+- ✅ **Word documents** - DOCX/DOC text extraction using mammoth
+- ✅ **Excel/CSV files** - XLSX/XLS/CSV parsing using xlsx library
+- ✅ **Text files** - TXT, JSON direct reading
+
+**Implementation:**
+- `electron/main.ts` - Added `process-document` IPC handler with native modules
+- `electron/preload.ts` - Added `processDocument` method to API bridge
+- `src/components/AIAssistant/AIAssistant.tsx` - Updated to use IPC for all file processing
+
+All document processing now happens securely in the main Electron process, with extracted text sent to the renderer for AI analysis.
+
+### 🔄 Next Steps
+1. ~~**PRIORITY**: Move document processing to main process for PDF/DOCX/XLSX support~~ ✅ COMPLETED
+2. Test AI Assistant end-to-end with real sustainability report documents
+3. Add loading states and better error messages
+4. Migrate API key storage to SQLite (encrypted table)
+5. Add usage tracking and cost reporting
+6. Test with various EFRAG sustainability report formats

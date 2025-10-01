@@ -16,6 +16,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   writeFile: (filePath: string, content: string) => ipcRenderer.invoke('write-file', filePath, content),
   readFile: (filePath: string) => ipcRenderer.invoke('read-file', filePath),
 
+  // AI Assistant file operations
+  readFileBuffer: (filePath: string) => ipcRenderer.invoke('read-file-buffer', filePath),
+  selectFilesForAI: () => ipcRenderer.invoke('select-files-for-ai'),
+  processDocument: (filePath: string) => ipcRenderer.invoke('process-document', filePath),
+
   // Menu event listeners
   onMenuNewReport: (callback: () => void) => {
     ipcRenderer.on('menu-new-report', callback);
@@ -57,6 +62,9 @@ declare global {
       openFileDialog: (options: any) => Promise<any>;
       writeFile: (filePath: string, content: string) => Promise<any>;
       readFile: (filePath: string) => Promise<any>;
+      readFileBuffer: (filePath: string) => Promise<Buffer>;
+      selectFilesForAI: () => Promise<{ filePaths: string[] } | undefined>;
+      processDocument: (filePath: string) => Promise<{ success: boolean; content?: string; error?: string }>;
       onMenuNewReport: (callback: () => void) => void;
       onMenuOpenReport: (callback: () => void) => void;
       onMenuSaveReport: (callback: () => void) => void;

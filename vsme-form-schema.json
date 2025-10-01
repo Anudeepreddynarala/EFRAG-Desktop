@@ -1,0 +1,1424 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VSME Digital Template - Form Schema",
+  "description": "Complete schema for the EFRAG VSME (Voluntary Sustainability Reporting Standard for Medium-sized Entities) digital reporting form. This schema represents all fields that need to be filled for sustainability reporting.",
+  "version": "1.0.0",
+  "sections": {
+    "section1_general_information": {
+      "title": "Section 1: General Information",
+      "subsections": {
+        "xbrl_information": {
+          "title": "Information on the report necessary for XBRL",
+          "fields": {
+            "entityName": {
+              "label": "Name of the reporting entity",
+              "type": "text",
+              "required": true,
+              "description": "The full legal name of the entity preparing this sustainability report.",
+              "extractionGuidance": "Look for: company name, legal entity name, registered name, corporate name"
+            },
+            "identifierType": {
+              "label": "Identifier type of the reporting entity",
+              "type": "select",
+              "required": true,
+              "options": ["LEI", "EU ID", "DUNS", "Perm ID"],
+              "description": "The type of unique identifier used for the entity.",
+              "extractionGuidance": "Look for: LEI number, legal entity identifier, EU company ID, DUNS number, PermID"
+            },
+            "identifierValue": {
+              "label": "Identifier value",
+              "type": "text",
+              "required": true,
+              "description": "The actual identifier value (e.g., LEI number).",
+              "extractionGuidance": "Look for: the actual ID number corresponding to the identifier type"
+            },
+            "currency": {
+              "label": "Currency of monetary values in the report",
+              "type": "select",
+              "required": true,
+              "options": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "NZD", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "BGN", "RON"],
+              "description": "The currency in which all monetary values are expressed.",
+              "extractionGuidance": "Look for: currency mentioned in financial statements, reporting currency"
+            },
+            "reportingStartDate": {
+              "label": "Reporting period start date",
+              "type": "date",
+              "required": true,
+              "format": "YYYY-MM-DD",
+              "description": "The start date of the reporting period.",
+              "extractionGuidance": "Look for: fiscal year start, reporting period start, from date"
+            },
+            "reportingEndDate": {
+              "label": "Reporting period end date",
+              "type": "date",
+              "required": true,
+              "format": "YYYY-MM-DD",
+              "description": "The end date of the reporting period.",
+              "extractionGuidance": "Look for: fiscal year end, reporting period end, to date"
+            }
+          }
+        },
+        "previous_reporting_period": {
+          "title": "Information on previous reporting period",
+          "fields": {
+            "hasPreviousReport": {
+              "label": "Has previous report with unchanged disclosures",
+              "type": "boolean",
+              "description": "Whether this report references unchanged disclosures from a previous report.",
+              "extractionGuidance": "Look for: references to prior year reports, unchanged information"
+            },
+            "unchangedDisclosures": {
+              "label": "List of unchanged disclosures",
+              "type": "array",
+              "items": "string",
+              "conditionalOn": "hasPreviousReport",
+              "options": [
+                "B1 Basis for preparation",
+                "B2 Practices, policies and future initiatives",
+                "B3 Energy and greenhouse gas emissions",
+                "B4 Pollution",
+                "B5 Biodiversity",
+                "B6 Water",
+                "B7 Resource use, circular economy and waste",
+                "B8 Workforce – General characteristics",
+                "B9 Workforce – Health and safety",
+                "B10 Workforce – Remuneration, collective bargaining and training",
+                "B11 Convictions and fines for corruption and bribery",
+                "C1 Strategy",
+                "C2 Practices/policies/future initiatives (detail)",
+                "C3 GHG reduction targets and climate transition",
+                "C4 Climate risks",
+                "C5 Additional workforce characteristics",
+                "C6 Own workforce human rights policies and processes",
+                "C7 Severe negative human rights incidents",
+                "C8 Revenues from certain sectors and EU benchmark exclusions",
+                "C9 Governance body gender diversity ratio"
+              ],
+              "extractionGuidance": "Identify which disclosure sections remain unchanged from previous report"
+            },
+            "previousReportUrl": {
+              "label": "Link to previous report",
+              "type": "url",
+              "conditionalOn": "hasPreviousReport",
+              "extractionGuidance": "Look for: URL links to prior reports, previous report location"
+            }
+          }
+        },
+        "basis_for_preparation": {
+          "title": "B1 Basis for Preparation and other undertaking's general information",
+          "fields": {
+            "basisForPreparation": {
+              "label": "Basis for preparation",
+              "type": "radio",
+              "required": true,
+              "options": [
+                "basic-only",
+                "basic-comprehensive"
+              ],
+              "description": "Whether using Basic Module only or Basic + Comprehensive Module.",
+              "extractionGuidance": "Look for: reporting framework, modules used, reporting scope"
+            },
+            "omittedDisclosures": {
+              "label": "List of omitted disclosures (classified or sensitive)",
+              "type": "array",
+              "items": "string",
+              "description": "Disclosures omitted due to classified or sensitive information.",
+              "extractionGuidance": "Look for: omissions, excluded information, sensitive data not disclosed"
+            },
+            "reportingBasis": {
+              "label": "Basis for reporting",
+              "type": "radio",
+              "required": true,
+              "options": ["consolidated", "individual"],
+              "description": "Whether report is consolidated (includes subsidiaries) or individual.",
+              "extractionGuidance": "Look for: consolidated accounts, group reporting, individual entity"
+            },
+            "legalForm": {
+              "label": "Undertaking's legal form",
+              "type": "select",
+              "required": true,
+              "options": [
+                "private limited liability undertaking",
+                "sole proprietorship",
+                "partnership",
+                "cooperative",
+                "other"
+              ],
+              "extractionGuidance": "Look for: legal structure, company type, entity form (Ltd, LLC, GmbH, etc.)"
+            },
+            "otherLegalForm": {
+              "label": "Other legal form specification",
+              "type": "text",
+              "conditionalOn": "legalForm === 'other'",
+              "description": "Specify the legal form if 'other' was selected.",
+              "extractionGuidance": "Specific legal form if not in standard list"
+            },
+            "naceCodes": {
+              "label": "NACE sector classification code(s)",
+              "type": "array",
+              "items": "string",
+              "required": true,
+              "description": "European statistical classification of economic activities codes.",
+              "extractionGuidance": "Look for: industry sector, business activities, NACE codes, SIC codes"
+            },
+            "balanceSheetSize": {
+              "label": "Size of balance sheet (€)",
+              "type": "number",
+              "required": true,
+              "unit": "EUR",
+              "description": "Total size of the balance sheet in euros.",
+              "extractionGuidance": "Look for: total assets, balance sheet total"
+            },
+            "turnover": {
+              "label": "Turnover (€)",
+              "type": "number",
+              "required": true,
+              "unit": "EUR",
+              "description": "Total turnover/revenue in euros.",
+              "extractionGuidance": "Look for: revenue, sales, turnover, total income"
+            },
+            "employeeCount": {
+              "label": "Number of employees",
+              "type": "number",
+              "required": true,
+              "description": "Total number of employees.",
+              "extractionGuidance": "Look for: employee count, workforce size, headcount, FTE"
+            },
+            "employeeCountingTiming": {
+              "label": "Employee counting methodology (Timing)",
+              "type": "select",
+              "required": true,
+              "options": ["end-of-period", "average"],
+              "description": "When the employee count was measured.",
+              "extractionGuidance": "Look for: as of date (end of period) or average during period"
+            },
+            "employeeCountingType": {
+              "label": "Employee counting methodology (Type)",
+              "type": "select",
+              "required": true,
+              "options": ["headcount", "fte"],
+              "description": "Whether using headcount or full-time equivalent.",
+              "extractionGuidance": "Look for: headcount vs FTE specification"
+            },
+            "primaryCountry": {
+              "label": "Country of primary operations",
+              "type": "select",
+              "required": true,
+              "description": "Country where primary operations and significant assets are located.",
+              "extractionGuidance": "Look for: headquarters location, main office, country of operations"
+            }
+          }
+        },
+        "subsidiaries": {
+          "title": "B1 – List of subsidiaries (if consolidated)",
+          "conditionalOn": "reportingBasis === 'consolidated'",
+          "fields": {
+            "subsidiaries": {
+              "label": "Subsidiaries list",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "address": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              },
+              "extractionGuidance": "Look for: list of subsidiaries, group companies, affiliated entities with addresses"
+            }
+          }
+        },
+        "sustainability_certifications": {
+          "title": "B1 – Sustainability-related certification(s) or label(s)",
+          "fields": {
+            "hasSustainabilityCerts": {
+              "label": "Has sustainability certifications",
+              "type": "boolean",
+              "extractionGuidance": "Look for: certifications, eco-labels, sustainability awards"
+            },
+            "sustainabilityCertsDescription": {
+              "label": "Description of certifications",
+              "type": "textarea",
+              "conditionalOn": "hasSustainabilityCerts",
+              "description": "Brief description including issuer, date, and rating score.",
+              "extractionGuidance": "Look for: ISO certifications, B Corp, Carbon Neutral, LEED, etc. with details"
+            }
+          }
+        },
+        "sites": {
+          "title": "B1 – List of site(s)",
+          "fields": {
+            "autoGeolocation": {
+              "label": "Enable automatic geolocation",
+              "type": "boolean",
+              "description": "Whether to use OpenStreetMap for automatic geolocation."
+            },
+            "sites": {
+              "label": "Sites list",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "postalCode": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "city": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "country": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "coordinates": {
+                    "type": "string",
+                    "format": "lat,lon"
+                  }
+                }
+              },
+              "extractionGuidance": "Look for: office locations, facility addresses, plant locations, site addresses"
+            }
+          }
+        },
+        "sustainability_practices": {
+          "title": "B2 – Practices, policies and future initiatives",
+          "fields": {
+            "hasSustainabilityPractices": {
+              "label": "Has sustainability practices/policies",
+              "type": "boolean",
+              "extractionGuidance": "Look for: sustainability initiatives, environmental policies, ESG programs"
+            },
+            "sustainabilityIssuesAddressed": {
+              "label": "Sustainability issues addressed",
+              "type": "array",
+              "items": "string",
+              "conditionalOn": "hasSustainabilityPractices",
+              "options": [
+                "Climate change",
+                "Pollution",
+                "Water and marine resources",
+                "Biodiversity and ecosystems",
+                "Circular economy",
+                "Own workforce",
+                "Workers in the value chain",
+                "Affected communities",
+                "Consumers and end-users",
+                "Business conduct"
+              ],
+              "extractionGuidance": "Identify which sustainability topics are covered by practices"
+            }
+          }
+        },
+        "cooperative_disclosures": {
+          "title": "B2 – Cooperative specific disclosures",
+          "fields": {
+            "cooperativeGovernance": {
+              "label": "Effective participation in governance",
+              "type": "textarea",
+              "description": "Description of worker/stakeholder participation in governance.",
+              "extractionGuidance": "For cooperatives: Look for: worker participation, stakeholder governance"
+            },
+            "cooperativeInvestment": {
+              "label": "Financial investment in social economy entities",
+              "type": "textarea",
+              "extractionGuidance": "For cooperatives: Look for: investments in social enterprises"
+            },
+            "cooperativeProfitLimits": {
+              "label": "Limits to profit distribution",
+              "type": "textarea",
+              "extractionGuidance": "For cooperatives: Look for: profit distribution limits, mutualistic constraints"
+            }
+          }
+        },
+        "practices_descriptions": {
+          "title": "C2 – Description of practices, policies and future initiatives",
+          "fields": {
+            "practicesDescriptions": {
+              "label": "Detailed descriptions",
+              "type": "array",
+              "items": "string",
+              "description": "Detailed descriptions of each practice/policy/initiative.",
+              "extractionGuidance": "Look for: detailed sustainability program descriptions"
+            }
+          }
+        },
+        "strategy": {
+          "title": "C1 – Strategy: Business Model and Sustainability",
+          "fields": {
+            "productsServices": {
+              "label": "Description of products and services",
+              "type": "textarea",
+              "extractionGuidance": "Look for: product lines, service offerings, main business activities"
+            },
+            "markets": {
+              "label": "Description of markets",
+              "type": "textarea",
+              "extractionGuidance": "Look for: B2B/B2C, geographic markets, customer segments, sales channels"
+            },
+            "businessRelationships": {
+              "label": "Description of business relationships",
+              "type": "textarea",
+              "extractionGuidance": "Look for: key suppliers, major customers, distribution partners"
+            },
+            "hasStrategySustainabilityElements": {
+              "label": "Strategy includes sustainability elements",
+              "type": "boolean",
+              "extractionGuidance": "Does strategy mention sustainability?"
+            },
+            "strategySustainabilityElements": {
+              "label": "Sustainability strategy elements",
+              "type": "textarea",
+              "conditionalOn": "hasStrategySustainabilityElements",
+              "extractionGuidance": "Look for: sustainability goals in strategy, ESG strategic priorities"
+            }
+          }
+        },
+        "additional_general_disclosures": {
+          "title": "Additional general disclosures (optional)",
+          "fields": {
+            "additionalDisclosures": {
+              "label": "Additional general disclosures",
+              "type": "textarea",
+              "extractionGuidance": "Any other relevant general information"
+            }
+          }
+        }
+      }
+    },
+    "section2_environmental": {
+      "title": "Section 2: Environmental Disclosures",
+      "subsections": {
+        "energy_consumption": {
+          "title": "B3 – Total Energy Consumption",
+          "fields": {
+            "totalEnergyConsumption": {
+              "label": "Total Energy Consumption (MWh)",
+              "type": "number",
+              "required": true,
+              "unit": "MWh",
+              "extractionGuidance": "Look for: total energy use, energy consumption in megawatt hours"
+            }
+          }
+        },
+        "energy_breakdown": {
+          "title": "B3 – Breakdown of energy consumption",
+          "fields": {
+            "hasEnergyBreakdown": {
+              "label": "Has energy breakdown",
+              "type": "boolean",
+              "extractionGuidance": "Is energy split by renewable/non-renewable available?"
+            },
+            "electricityRenewable": {
+              "label": "Electricity renewable (MWh)",
+              "type": "number",
+              "unit": "MWh",
+              "conditionalOn": "hasEnergyBreakdown",
+              "extractionGuidance": "Look for: renewable electricity, green energy, solar/wind electricity purchased"
+            },
+            "electricityNonRenewable": {
+              "label": "Electricity non-renewable (MWh)",
+              "type": "number",
+              "unit": "MWh",
+              "conditionalOn": "hasEnergyBreakdown",
+              "extractionGuidance": "Look for: grid electricity, conventional electricity"
+            },
+            "selfGeneratedRenewable": {
+              "label": "Self-generated renewable (MWh)",
+              "type": "number",
+              "unit": "MWh",
+              "conditionalOn": "hasEnergyBreakdown",
+              "extractionGuidance": "Look for: on-site solar, on-site wind generation"
+            },
+            "selfGeneratedNonRenewable": {
+              "label": "Self-generated non-renewable (MWh)",
+              "type": "number",
+              "unit": "MWh",
+              "conditionalOn": "hasEnergyBreakdown",
+              "extractionGuidance": "Look for: on-site generators, diesel generation"
+            },
+            "fuelsRenewable": {
+              "label": "Fuels renewable (MWh)",
+              "type": "number",
+              "unit": "MWh",
+              "conditionalOn": "hasEnergyBreakdown",
+              "extractionGuidance": "Look for: biofuels, renewable gas"
+            },
+            "fuelsNonRenewable": {
+              "label": "Fuels non-renewable (MWh)",
+              "type": "number",
+              "unit": "MWh",
+              "conditionalOn": "hasEnergyBreakdown",
+              "extractionGuidance": "Look for: natural gas, diesel, petrol, heating oil consumption"
+            }
+          }
+        },
+        "ghg_emissions": {
+          "title": "B3 – GHG Emissions (GHG Protocol Version 2004)",
+          "fields": {
+            "currentScope1": {
+              "label": "Gross Scope 1 GHG Emissions (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "extractionGuidance": "Look for: direct emissions, Scope 1, on-site emissions, combustion emissions"
+            },
+            "currentScope2Location": {
+              "label": "Gross Scope 2 location-based (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "extractionGuidance": "Look for: indirect emissions from electricity, Scope 2 location-based"
+            },
+            "currentScope2Market": {
+              "label": "Gross Scope 2 market-based (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "extractionGuidance": "Look for: Scope 2 market-based, contractual emissions from electricity"
+            },
+            "currentScope3Emissions": {
+              "label": "Scope 3 emissions by category",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string",
+                    "options": [
+                      "1. Purchased Goods and Services",
+                      "2. Capital Goods",
+                      "3. Fuel- and Energy-Related Activities (Not Included in Scope 1 or Scope 2)",
+                      "4. Upstream Transportation and Distribution",
+                      "5. Waste Generated in Operations",
+                      "6. Business Travel",
+                      "7. Employee Commuting",
+                      "8. Upstream Leased Assets",
+                      "9. Downstream Transportation and Distribution",
+                      "10. Processing of Sold Products",
+                      "11. Use of Sold Products",
+                      "12. End-of-Life Treatment of Sold Products",
+                      "13. Downstream Leased Assets",
+                      "14. Franchises",
+                      "15. Investments"
+                    ]
+                  },
+                  "currentEmissions": {
+                    "type": "number",
+                    "unit": "tCO2e"
+                  }
+                }
+              },
+              "extractionGuidance": "Look for: Scope 3 emissions, value chain emissions, supply chain emissions, business travel, employee commuting, sold products"
+            }
+          }
+        },
+        "ghg_targets": {
+          "title": "C3 – GHG reduction targets",
+          "fields": {
+            "hasGHGTargets": {
+              "label": "Has GHG reduction targets",
+              "type": "boolean",
+              "extractionGuidance": "Look for: emission reduction targets, net zero commitments, decarbonization goals"
+            },
+            "ghgTargetBaseYear": {
+              "label": "Target base year",
+              "type": "number",
+              "format": "YYYY",
+              "conditionalOn": "hasGHGTargets",
+              "extractionGuidance": "Look for: baseline year, base year for targets"
+            },
+            "ghgTargetYear": {
+              "label": "Target year",
+              "type": "number",
+              "format": "YYYY",
+              "conditionalOn": "hasGHGTargets",
+              "extractionGuidance": "Look for: target year, goal year (e.g., 2030, 2050)"
+            },
+            "scope1BaseYear": {
+              "label": "Scope 1 base year emissions (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "conditionalOn": "hasGHGTargets",
+              "extractionGuidance": "Historical Scope 1 emissions in base year"
+            },
+            "scope1TargetYear": {
+              "label": "Scope 1 target year emissions (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "conditionalOn": "hasGHGTargets",
+              "extractionGuidance": "Target Scope 1 emissions for goal year"
+            },
+            "scope2LocationBaseYear": {
+              "label": "Scope 2 location-based base year (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "conditionalOn": "hasGHGTargets"
+            },
+            "scope2LocationTargetYear": {
+              "label": "Scope 2 location-based target year (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "conditionalOn": "hasGHGTargets"
+            },
+            "scope2MarketBaseYear": {
+              "label": "Scope 2 market-based base year (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "conditionalOn": "hasGHGTargets"
+            },
+            "scope2MarketTargetYear": {
+              "label": "Scope 2 market-based target year (tCO2e)",
+              "type": "number",
+              "unit": "tCO2e",
+              "conditionalOn": "hasGHGTargets"
+            },
+            "hasScope3Emissions": {
+              "label": "Disclosing Scope 3 targets",
+              "type": "boolean",
+              "conditionalOn": "hasGHGTargets"
+            },
+            "scope3Emissions": {
+              "label": "Scope 3 targets by category",
+              "type": "array",
+              "conditionalOn": "hasScope3Emissions",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string"
+                  },
+                  "baseYearEmissions": {
+                    "type": "number",
+                    "unit": "tCO2e"
+                  },
+                  "targetYearEmissions": {
+                    "type": "number",
+                    "unit": "tCO2e"
+                  }
+                }
+              },
+              "extractionGuidance": "Scope 3 reduction targets by category"
+            },
+            "mainActionsForTargets": {
+              "label": "Main actions to achieve targets",
+              "type": "textarea",
+              "extractionGuidance": "Look for: action plans, reduction strategies, initiatives to meet targets"
+            }
+          }
+        },
+        "transition_plan": {
+          "title": "C3 – Transition plan",
+          "fields": {
+            "operatesHighImpactSectors": {
+              "label": "Operates in high climate impact sectors",
+              "type": "boolean",
+              "extractionGuidance": "Does company operate in energy-intensive or fossil fuel sectors?"
+            },
+            "transitionPlanStatus": {
+              "label": "Transition plan status",
+              "type": "radio",
+              "options": ["planned", "adopted"],
+              "extractionGuidance": "Look for: climate transition plan status"
+            },
+            "transitionPlanAdoptionDate": {
+              "label": "Transition plan adoption date",
+              "type": "date",
+              "conditionalOn": "transitionPlanStatus === 'planned'",
+              "extractionGuidance": "Planned date for transition plan adoption"
+            },
+            "transitionPlanDescription": {
+              "label": "Transition plan description",
+              "type": "textarea",
+              "extractionGuidance": "Look for: decarbonization roadmap, climate transition strategy"
+            }
+          }
+        },
+        "pollution": {
+          "title": "B4 – Pollution",
+          "fields": {
+            "reportsPollution": {
+              "label": "Reports pollution to authorities",
+              "type": "boolean",
+              "extractionGuidance": "Does company report emissions to environmental authorities?"
+            },
+            "pollutionPubliclyAvailable": {
+              "label": "Pollution report publicly available",
+              "type": "boolean",
+              "conditionalOn": "reportsPollution"
+            },
+            "pollutionReportUrl": {
+              "label": "URL to pollution report",
+              "type": "url",
+              "conditionalOn": "pollutionPubliclyAvailable"
+            },
+            "pollutionUnit": {
+              "label": "Unit for pollution reporting",
+              "type": "select",
+              "options": ["kg", "tonne"],
+              "conditionalOn": "reportsPollution"
+            },
+            "pollutionData": {
+              "label": "Pollution data by pollutant",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "pollutant": {
+                    "type": "string",
+                    "description": "Name of pollutant (e.g., NOx, SOx, PM10, VOCs)"
+                  },
+                  "emissionToAir": {
+                    "type": "number"
+                  },
+                  "emissionToWater": {
+                    "type": "number"
+                  },
+                  "emissionToSoil": {
+                    "type": "number"
+                  }
+                }
+              },
+              "extractionGuidance": "Look for: air pollutants, water pollutants, hazardous substances, NOx, SOx, particulate matter"
+            }
+          }
+        },
+        "water": {
+          "title": "B6 – Water",
+          "fields": {
+            "totalWaterWithdrawal": {
+              "label": "Total water withdrawal (m³)",
+              "type": "number",
+              "unit": "m³",
+              "required": true,
+              "extractionGuidance": "Look for: water consumption, water use, water withdrawal"
+            },
+            "waterWithdrawalHighStress": {
+              "label": "Water withdrawal in high water-stress areas (m³)",
+              "type": "number",
+              "unit": "m³",
+              "required": true,
+              "extractionGuidance": "Water from water-stressed regions"
+            },
+            "hasWaterConsumingProcesses": {
+              "label": "Has water-consuming processes",
+              "type": "boolean",
+              "extractionGuidance": "Does company have significant water-consuming operations?"
+            },
+            "waterDischarge": {
+              "label": "Water discharge (m³)",
+              "type": "number",
+              "unit": "m³",
+              "extractionGuidance": "Look for: wastewater discharge, water returned"
+            }
+          }
+        },
+        "biodiversity": {
+          "title": "B5 – Biodiversity",
+          "fields": {
+            "hasBiodiversitySites": {
+              "label": "Has sites in biodiversity-sensitive areas",
+              "type": "boolean",
+              "extractionGuidance": "Look for: operations near protected areas, nature reserves, sensitive ecosystems"
+            },
+            "biodiversityAreaUnit": {
+              "label": "Unit for area measurement",
+              "type": "select",
+              "options": ["hectares", "m2"],
+              "conditionalOn": "hasBiodiversitySites"
+            },
+            "biodiversitySites": {
+              "label": "Biodiversity sites list",
+              "type": "array",
+              "conditionalOn": "hasBiodiversitySites",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "siteId": {
+                    "type": "string"
+                  },
+                  "siteLocation": {
+                    "type": "string"
+                  },
+                  "area": {
+                    "type": "number"
+                  },
+                  "inSensitiveArea": {
+                    "type": "select",
+                    "options": ["Yes", "No"]
+                  },
+                  "nearSensitiveArea": {
+                    "type": "select",
+                    "options": ["Yes", "No"]
+                  }
+                }
+              },
+              "extractionGuidance": "Sites near or in protected areas"
+            },
+            "landUseAreaUnit": {
+              "label": "Land-use area unit",
+              "type": "select",
+              "options": ["hectares", "m2"]
+            },
+            "totalSealedArea": {
+              "label": "Total sealed area",
+              "type": "number",
+              "extractionGuidance": "Look for: paved areas, built surfaces"
+            },
+            "totalNatureOnSite": {
+              "label": "Total nature-oriented area on-site",
+              "type": "number",
+              "extractionGuidance": "Look for: green spaces, gardens, natural areas on-site"
+            },
+            "totalNatureOffSite": {
+              "label": "Total nature-oriented area off-site",
+              "type": "number",
+              "extractionGuidance": "Look for: conservation areas managed off-site"
+            }
+          }
+        },
+        "circular_economy": {
+          "title": "B7 – Circular Economy",
+          "fields": {
+            "appliesCircularEconomy": {
+              "label": "Applies circular economy principles",
+              "type": "radio",
+              "options": ["yes", "no"],
+              "required": true,
+              "extractionGuidance": "Look for: circular economy, recycling programs, product take-back, reuse initiatives"
+            },
+            "circularEconomyDescription": {
+              "label": "Description of circular economy practices",
+              "type": "textarea",
+              "conditionalOn": "appliesCircularEconomy === 'yes'",
+              "extractionGuidance": "Look for: recycling rates, reuse programs, design for circularity"
+            }
+          }
+        },
+        "waste": {
+          "title": "B7 – Waste Generated",
+          "fields": {
+            "wasteData": {
+              "label": "Waste data by type",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "wasteType": {
+                    "type": "string",
+                    "description": "Type of waste (e.g., hazardous, non-hazardous, electronic, etc.)"
+                  },
+                  "unit": {
+                    "type": "select",
+                    "options": ["kg", "tonne", "m³"]
+                  },
+                  "wasteDiverted": {
+                    "type": "number",
+                    "description": "Waste recycled or reused"
+                  },
+                  "wasteDisposal": {
+                    "type": "number",
+                    "description": "Waste sent to disposal"
+                  }
+                }
+              },
+              "extractionGuidance": "Look for: waste generation, recycling rates, landfill waste, hazardous waste"
+            }
+          }
+        },
+        "materials": {
+          "title": "B7 – Materials Used",
+          "fields": {
+            "operatesSignificantMaterials": {
+              "label": "Uses significant material flows",
+              "type": "boolean",
+              "extractionGuidance": "Does company use significant raw materials in operations?"
+            },
+            "materialsData": {
+              "label": "Materials data",
+              "type": "array",
+              "conditionalOn": "operatesSignificantMaterials",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "materialName": {
+                    "type": "string",
+                    "description": "Name of material (e.g., steel, plastic, wood, cement)"
+                  },
+                  "massVolume": {
+                    "type": "number"
+                  },
+                  "unitMeasurement": {
+                    "type": "select",
+                    "options": ["kg", "tonne", "m³"]
+                  }
+                }
+              },
+              "extractionGuidance": "Look for: raw materials used, input materials, resource consumption"
+            }
+          }
+        },
+        "climate_risks": {
+          "title": "C4 – Climate Risks",
+          "fields": {
+            "hasClimateRisks": {
+              "label": "Has identified climate risks",
+              "type": "boolean",
+              "extractionGuidance": "Look for: climate risk assessment, physical risks, transition risks"
+            },
+            "climateHazardsDescription": {
+              "label": "Description of climate hazards",
+              "type": "textarea",
+              "conditionalOn": "hasClimateRisks",
+              "extractionGuidance": "Look for: flooding risks, extreme weather, heat stress, drought risks"
+            },
+            "climateExposureAssessment": {
+              "label": "Climate exposure assessment",
+              "type": "textarea",
+              "conditionalOn": "hasClimateRisks",
+              "extractionGuidance": "How climate risks were assessed"
+            },
+            "climateTimeHorizons": {
+              "label": "Time horizons for climate risks",
+              "type": "textarea",
+              "conditionalOn": "hasClimateRisks",
+              "extractionGuidance": "Short-term, medium-term, long-term risks"
+            },
+            "hasClimateAdaptationActions": {
+              "label": "Has climate adaptation actions",
+              "type": "boolean",
+              "conditionalOn": "hasClimateRisks",
+              "extractionGuidance": "Look for: adaptation measures, resilience actions"
+            },
+            "climateAdverseEffects": {
+              "label": "Potential adverse effects",
+              "type": "textarea",
+              "conditionalOn": "hasClimateRisks",
+              "extractionGuidance": "Potential financial and operational impacts of climate risks"
+            }
+          }
+        },
+        "additional_environmental": {
+          "title": "Additional Environmental Disclosures",
+          "fields": {
+            "additionalEnvironmentalDisclosures": {
+              "label": "Additional environmental disclosures",
+              "type": "textarea",
+              "extractionGuidance": "Any other environmental information"
+            }
+          }
+        }
+      }
+    },
+    "section3_social": {
+      "title": "Section 3: Social Disclosures",
+      "subsections": {
+        "workforce_contract": {
+          "title": "B8 – Workforce by Contract Type",
+          "fields": {
+            "permanentEmployees": {
+              "label": "Permanent employees",
+              "type": "number",
+              "extractionGuidance": "Look for: full-time permanent employees, permanent contracts"
+            },
+            "temporaryEmployees": {
+              "label": "Temporary employees",
+              "type": "number",
+              "extractionGuidance": "Look for: temporary workers, fixed-term contracts, contractors"
+            }
+          }
+        },
+        "workforce_gender": {
+          "title": "B8 – Workforce by Gender",
+          "fields": {
+            "maleEmployees": {
+              "label": "Male employees",
+              "type": "number",
+              "extractionGuidance": "Number of male employees"
+            },
+            "femaleEmployees": {
+              "label": "Female employees",
+              "type": "number",
+              "extractionGuidance": "Number of female employees"
+            },
+            "otherGenderEmployees": {
+              "label": "Other gender employees",
+              "type": "number",
+              "extractionGuidance": "Employees identifying as other genders"
+            },
+            "notReportedGenderEmployees": {
+              "label": "Gender not reported",
+              "type": "number",
+              "extractionGuidance": "Employees who did not report gender"
+            }
+          }
+        },
+        "workforce_country": {
+          "title": "B8 – Workforce by Country",
+          "fields": {
+            "employeesByCountry": {
+              "label": "Employees by country",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "country": {
+                    "type": "string"
+                  },
+                  "numberOfEmployees": {
+                    "type": "number"
+                  }
+                }
+              },
+              "extractionGuidance": "Look for: employee distribution by country, geographic breakdown of workforce"
+            }
+          }
+        },
+        "workforce_turnover": {
+          "title": "B8 – Workforce Turnover",
+          "fields": {
+            "employeesLeft": {
+              "label": "Employees who left",
+              "type": "number",
+              "extractionGuidance": "Look for: attrition, turnover, employees departed"
+            },
+            "employeesBeginning": {
+              "label": "Employees at beginning of period",
+              "type": "number",
+              "extractionGuidance": "Headcount at start of reporting period"
+            },
+            "employeesEnd": {
+              "label": "Employees at end of period",
+              "type": "number",
+              "extractionGuidance": "Headcount at end of reporting period"
+            }
+          }
+        },
+        "health_safety": {
+          "title": "B9 – Health and Safety",
+          "fields": {
+            "recordableAccidents": {
+              "label": "Number of recordable work-related accidents",
+              "type": "number",
+              "extractionGuidance": "Look for: workplace accidents, injuries, recordable incidents, OSHA recordable"
+            },
+            "workHoursPerEmployee": {
+              "label": "Work hours per full-time employee",
+              "type": "number",
+              "default": 2000,
+              "extractionGuidance": "Standard working hours (typically 2000 hours/year)"
+            },
+            "fatalitiesWorkRelated": {
+              "label": "Number of work-related fatalities",
+              "type": "number",
+              "extractionGuidance": "Look for: workplace fatalities, deaths"
+            }
+          }
+        },
+        "remuneration": {
+          "title": "B10 – Remuneration and Collective Bargaining",
+          "fields": {
+            "minWageCompliance": {
+              "label": "Complies with minimum wage",
+              "type": "boolean",
+              "extractionGuidance": "All employees paid at or above minimum wage?"
+            },
+            "maleHourlyPay": {
+              "label": "Male average hourly pay",
+              "type": "number",
+              "extractionGuidance": "Look for: average hourly wage for men"
+            },
+            "femaleHourlyPay": {
+              "label": "Female average hourly pay",
+              "type": "number",
+              "extractionGuidance": "Look for: average hourly wage for women, gender pay gap data"
+            },
+            "collectiveBargainingEmployees": {
+              "label": "Employees covered by collective bargaining",
+              "type": "number",
+              "extractionGuidance": "Look for: unionized employees, collective agreements"
+            }
+          }
+        },
+        "training": {
+          "title": "B10 – Training Hours",
+          "fields": {
+            "maleTrainingHours": {
+              "label": "Male training hours per employee",
+              "type": "number",
+              "extractionGuidance": "Look for: training hours for male employees"
+            },
+            "femaleTrainingHours": {
+              "label": "Female training hours per employee",
+              "type": "number",
+              "extractionGuidance": "Look for: training hours for female employees"
+            },
+            "otherTrainingHours": {
+              "label": "Other gender training hours per employee",
+              "type": "number"
+            },
+            "notReportedTrainingHours": {
+              "label": "Not reported training hours per employee",
+              "type": "number"
+            }
+          }
+        },
+        "management_diversity": {
+          "title": "C5 – Management Diversity",
+          "fields": {
+            "maleManagementEmployees": {
+              "label": "Male employees at management level",
+              "type": "number",
+              "extractionGuidance": "Look for: male managers, male leadership"
+            },
+            "femaleManagementEmployees": {
+              "label": "Female employees at management level",
+              "type": "number",
+              "extractionGuidance": "Look for: female managers, female leadership"
+            },
+            "selfEmployedWorkers": {
+              "label": "Self-employed workers",
+              "type": "number",
+              "extractionGuidance": "Look for: independent contractors, freelancers working exclusively for company"
+            },
+            "temporaryAgencyWorkers": {
+              "label": "Temporary agency workers",
+              "type": "number",
+              "extractionGuidance": "Look for: agency temps, staffing agency workers"
+            }
+          }
+        },
+        "human_rights_policies": {
+          "title": "C6 – Human Rights Policies",
+          "fields": {
+            "hasHumanRightsPolicy": {
+              "label": "Has human rights policy",
+              "type": "boolean",
+              "extractionGuidance": "Look for: code of conduct, human rights policy, ethics policy"
+            },
+            "childLabour": {
+              "label": "Covers child labour",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsPolicy",
+              "extractionGuidance": "Policy covers child labor prohibition"
+            },
+            "forcedLabour": {
+              "label": "Covers forced labour",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsPolicy",
+              "extractionGuidance": "Policy covers forced labor prohibition"
+            },
+            "humanTrafficking": {
+              "label": "Covers human trafficking",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsPolicy"
+            },
+            "discrimination": {
+              "label": "Covers discrimination",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsPolicy",
+              "extractionGuidance": "Policy covers non-discrimination"
+            },
+            "accidentPrevention": {
+              "label": "Covers accident prevention",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsPolicy",
+              "extractionGuidance": "Policy covers health and safety"
+            },
+            "otherHrContent": {
+              "label": "Covers other HR content",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsPolicy"
+            },
+            "otherHrContentSpecification": {
+              "label": "Other HR content specification",
+              "type": "textarea",
+              "conditionalOn": "otherHrContent"
+            },
+            "hasComplaintMechanism": {
+              "label": "Has complaint mechanism",
+              "type": "boolean",
+              "extractionGuidance": "Look for: whistleblower hotline, grievance mechanism, ethics reporting"
+            }
+          }
+        },
+        "human_rights_incidents": {
+          "title": "C7 – Human Rights Incidents",
+          "fields": {
+            "hasHumanRightsIncidents": {
+              "label": "Has confirmed human rights incidents",
+              "type": "boolean",
+              "extractionGuidance": "Look for: confirmed violations, human rights incidents"
+            },
+            "incidentChildLabour": {
+              "label": "Child labour incidents",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsIncidents"
+            },
+            "incidentForcedLabour": {
+              "label": "Forced labour incidents",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsIncidents"
+            },
+            "incidentHumanTrafficking": {
+              "label": "Human trafficking incidents",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsIncidents"
+            },
+            "incidentDiscrimination": {
+              "label": "Discrimination incidents",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsIncidents"
+            },
+            "incidentOther": {
+              "label": "Other incidents",
+              "type": "boolean",
+              "conditionalOn": "hasHumanRightsIncidents"
+            },
+            "otherHrIncidents": {
+              "label": "Other incidents description",
+              "type": "textarea",
+              "conditionalOn": "incidentOther"
+            },
+            "hrIncidentActions": {
+              "label": "Actions taken for incidents",
+              "type": "textarea",
+              "conditionalOn": "hasHumanRightsIncidents",
+              "extractionGuidance": "Remedial actions taken"
+            },
+            "awareExternalIncidents": {
+              "label": "Aware of external incidents",
+              "type": "boolean",
+              "extractionGuidance": "Incidents in value chain or with external stakeholders"
+            },
+            "externalIncidentsSpecification": {
+              "label": "External incidents specification",
+              "type": "textarea",
+              "conditionalOn": "awareExternalIncidents"
+            }
+          }
+        },
+        "additional_social": {
+          "title": "Additional Social Disclosures",
+          "fields": {
+            "additionalSocialDisclosures": {
+              "label": "Additional social disclosures",
+              "type": "textarea",
+              "extractionGuidance": "Any other social or workforce information"
+            }
+          }
+        }
+      }
+    },
+    "section4_governance": {
+      "title": "Section 4: Governance Disclosures",
+      "subsections": {
+        "corruption_bribery": {
+          "title": "B11 – Convictions and Fines for Corruption and Bribery",
+          "fields": {
+            "hasConvictionsFines": {
+              "label": "Has convictions or fines for corruption/bribery",
+              "type": "boolean",
+              "extractionGuidance": "Look for: anti-corruption violations, bribery fines, FCPA violations"
+            },
+            "totalConvictions": {
+              "label": "Total number of convictions",
+              "type": "number",
+              "conditionalOn": "hasConvictionsFines",
+              "extractionGuidance": "Number of corruption/bribery convictions"
+            },
+            "finesCurrency": {
+              "label": "Currency for fines",
+              "type": "select",
+              "options": ["USD", "EUR", "GBP"],
+              "conditionalOn": "hasConvictionsFines"
+            },
+            "totalFinesAmount": {
+              "label": "Total amount of fines",
+              "type": "number",
+              "conditionalOn": "hasConvictionsFines",
+              "extractionGuidance": "Total monetary amount of fines"
+            }
+          }
+        },
+        "controversial_revenues": {
+          "title": "C8 – Revenues from Certain Sectors",
+          "fields": {
+            "derivesControversialRevenues": {
+              "label": "Derives revenues from controversial sectors",
+              "type": "boolean",
+              "extractionGuidance": "Revenues from weapons, tobacco, fossil fuels, chemicals?"
+            },
+            "revenueControversialWeapons": {
+              "label": "Revenue from controversial weapons (EUR)",
+              "type": "number",
+              "unit": "EUR",
+              "conditionalOn": "derivesControversialRevenues",
+              "extractionGuidance": "Look for: weapons revenue, defense revenue (anti-personnel mines, cluster munitions, chemical/biological weapons)"
+            },
+            "revenueTobacco": {
+              "label": "Revenue from tobacco (EUR)",
+              "type": "number",
+              "unit": "EUR",
+              "conditionalOn": "derivesControversialRevenues",
+              "extractionGuidance": "Look for: tobacco cultivation, production, processing revenue"
+            },
+            "revenueCoal": {
+              "label": "Revenue from coal (EUR)",
+              "type": "number",
+              "unit": "EUR",
+              "conditionalOn": "derivesControversialRevenues",
+              "extractionGuidance": "Look for: coal mining, coal sales revenue"
+            },
+            "revenueOil": {
+              "label": "Revenue from oil (EUR)",
+              "type": "number",
+              "unit": "EUR",
+              "conditionalOn": "derivesControversialRevenues",
+              "extractionGuidance": "Look for: oil extraction, refining, distribution revenue"
+            },
+            "revenueGas": {
+              "label": "Revenue from gas (EUR)",
+              "type": "number",
+              "unit": "EUR",
+              "conditionalOn": "derivesControversialRevenues",
+              "extractionGuidance": "Look for: natural gas extraction, processing revenue"
+            },
+            "revenueChemicals": {
+              "label": "Revenue from chemicals (EUR)",
+              "type": "number",
+              "unit": "EUR",
+              "conditionalOn": "derivesControversialRevenues",
+              "extractionGuidance": "Look for: chemical manufacturing revenue"
+            }
+          }
+        },
+        "eu_benchmark_exclusions": {
+          "title": "C8 – Exclusion from EU Reference Benchmarks",
+          "fields": {
+            "coalLigniteThreshold": {
+              "label": "1%+ revenues from coal/lignite",
+              "type": "boolean",
+              "extractionGuidance": ">=1% of revenues from hard coal and lignite"
+            },
+            "oilFuelsThreshold": {
+              "label": "10%+ revenues from oil",
+              "type": "boolean",
+              "extractionGuidance": ">=10% of revenues from oil fuels"
+            },
+            "gaseousFuelsThreshold": {
+              "label": "50%+ revenues from gas",
+              "type": "boolean",
+              "extractionGuidance": ">=50% of revenues from gaseous fuels"
+            },
+            "electricityGenerationThreshold": {
+              "label": "50%+ revenues from high-carbon electricity",
+              "type": "boolean",
+              "extractionGuidance": ">=50% of revenues from electricity generation >100g CO2e/kWh"
+            },
+            "noneOfAbove": {
+              "label": "None of the above thresholds apply",
+              "type": "boolean",
+              "extractionGuidance": "Company does not meet any exclusion criteria"
+            }
+          }
+        },
+        "board_diversity": {
+          "title": "C9 – Gender Diversity in Governance Body",
+          "fields": {
+            "hasGovernanceBody": {
+              "label": "Has governance body",
+              "type": "boolean",
+              "extractionGuidance": "Does company have board of directors or supervisory board?"
+            },
+            "femaleBoardMembers": {
+              "label": "Number of female board members",
+              "type": "number",
+              "conditionalOn": "hasGovernanceBody",
+              "extractionGuidance": "Look for: female directors, women on board"
+            },
+            "maleBoardMembers": {
+              "label": "Number of male board members",
+              "type": "number",
+              "conditionalOn": "hasGovernanceBody",
+              "extractionGuidance": "Look for: male directors, men on board"
+            }
+          }
+        },
+        "additional_governance": {
+          "title": "Additional Governance Disclosures",
+          "fields": {
+            "additionalGovernanceDisclosures": {
+              "label": "Additional governance disclosures",
+              "type": "textarea",
+              "extractionGuidance": "Any other governance information"
+            }
+          }
+        }
+      }
+    }
+  },
+  "calculatedFields": {
+    "note": "The following fields are automatically calculated and do not need to be extracted from documents",
+    "fields": [
+      "totalEmployees (from permanent + temporary)",
+      "totalWaterConsumption (from withdrawal - discharge)",
+      "totalFossilFuelRevenues (from coal + oil + gas)",
+      "genderPayGap (from male/female hourly pay)",
+      "genderDiversityRatio (from female/male board members)",
+      "ghgEmissionIntensity (from emissions / turnover)",
+      "employeeTurnoverRate (from employees left / average)",
+      "accidentRate (from accidents / total hours worked)",
+      "percentageReduction (for GHG targets)",
+      "totalWaste (from diverted + disposal)"
+    ]
+  },
+  "extractionInstructions": {
+    "generalPrinciples": [
+      "CRITICAL: ONLY extract data that is explicitly stated in the documents. NEVER infer, calculate, estimate, or guess values.",
+      "If data is not found, mark the field as 'NOT_FOUND' - do not leave blank or use placeholder values.",
+      "Always cite the exact source: filename, page number, section, and exact quote.",
+      "Provide confidence level: HIGH (exact match), MEDIUM (needs verification), LOW (uncertain).",
+      "If multiple conflicting values are found for the same field, flag for user review.",
+      "Validate extracted values against expected formats and ranges.",
+      "For numeric fields, ensure units match the schema specification.",
+      "For date fields, use YYYY-MM-DD format.",
+      "For boolean fields, look for clear affirmative or negative statements.",
+      "For arrays/lists, extract all relevant items."
+    ],
+    "outputFormat": {
+      "structure": "For each field, provide a JSON object with the following structure",
+      "example": {
+        "field_name": "entityName",
+        "value": "Acme Corp" or null,
+        "found": true or false,
+        "source": "annual_report.pdf, page 3, 'Company Information' section",
+        "quote": "The reporting entity is Acme Corp, a private limited liability company.",
+        "confidence": "HIGH" or "MEDIUM" or "LOW",
+        "notes": "Additional context if needed",
+        "requiresReview": false or true
+      }
+    },
+    "priorityFields": {
+      "high_priority": [
+        "entityName",
+        "reportingStartDate",
+        "reportingEndDate",
+        "currency",
+        "totalEnergyConsumption",
+        "currentScope1",
+        "currentScope2Location",
+        "employeeCount",
+        "turnover",
+        "balanceSheetSize"
+      ],
+      "description": "Extract these fields first as they are required and frequently used in calculations"
+    }
+  }
+}

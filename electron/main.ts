@@ -4,6 +4,9 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
+import pdfParse from 'pdf-parse';
+import mammoth from 'mammoth';
+import * as XLSX from 'xlsx';
 
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -276,6 +279,75 @@ ipcMain.handle('get-total-memory', async () => {
 
 ipcMain.handle('get-free-memory', async () => {
   return os.freemem();
+});
+
+// AI Assistant file operations
+ipcMain.handle('read-file-buffer', async (event, filePath: string) => {
+  try {
+    const buffer = fs.readFileSync(filePath);
+    return buffer;
+  } catch (error: any) {
+    console.error('Error reading file buffer:', error);
+    throw new Error(`Failed to read file: ${error.message}`);
+  }
+});
+
+ipcMain.handle('select-files-for-ai', async () => {
+  try {
+    const result = await dialog.showOpenDialog({
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'Documents', extensions: ['pdf', 'docx', 'doc', 'xlsx', 'xls', 'csv', 'txt', 'json'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    });
+
+    if (result.canceled) {
+      return undefined;
+    }
+
+    return { filePaths: result.filePaths };
+  } catch (error: any) {
+    console.error('Error selecting files:', error);
+    throw new Error(`Failed to select files: ${error.message}`);
+  }
+});
+
+// Process documents (PDF, DOCX, Excel, etc.) for AI Assistant
+ipcMain.handle('process-document', async (event, filePath: string) => {
+  try {
+    const ext = path.extname(filePath).toLowerCase();
+    const buffer = fs.readFileSync(filePath);
+
+    if (ext === '.pdf') {
+      // Extract text from PDF
+      const data = await pdfParse(buffer);
+      return { success: true, content: data.text };
+    } else if (ext === '.docx' || ext === '.doc') {
+      // Extract text from DOCX
+      const result = await mammoth.extractRawText({ buffer });
+      return { success: true, content: result.value };
+    } else if (['.xlsx', '.xls', '.csv'].includes(ext)) {
+      // Parse Excel/CSV files
+      const workbook = XLSX.read(buffer, { type: 'buffer' });
+      let text = '';
+      workbook.SheetNames.forEach(name => {
+        const sheet = workbook.Sheets[name];
+        text += `\n\n=== Sheet: ${name} ===\n`;
+        text += XLSX.utils.sheet_to_csv(sheet);
+      });
+      return { success: true, content: text };
+    } else if (['.txt', '.json'].includes(ext)) {
+      // Plain text files
+      return { success: true, content: buffer.toString('utf-8') };
+    } else {
+      // Try to read as text
+      return { success: true, content: buffer.toString('utf-8') };
+    }
+  } catch (error: any) {
+    console.error('Error processing document:', error);
+    return { success: false, error: error.message };
+  }
 });
 
 app.on('ready', () => {

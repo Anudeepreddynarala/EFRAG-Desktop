@@ -17,23 +17,38 @@ EFRAG Desktop helps companies create sustainability reports that meet European r
 
 ## Features
 
-### 🤖 AI-Powered Form Filling (Experimental)
+### 🤖 AI-Powered Form Filling
 **NEW!** Let AI help fill out your sustainability form automatically:
-- Upload documents (PDF, TXT, CSV, JSON, DOCX) or paste text
-- AI extracts data from your sustainability reports
-- 100% local processing - your data never leaves your computer
+- Upload documents (PDF, DOCX, XLSX, CSV, TXT, JSON)
+- ChatGPT extracts data from your sustainability reports
 - Zero hallucination policy - AI never guesses or infers data
 - Every extracted value includes source citation and confidence score
 - Clear transparency reports showing what was found vs. not found
-- User-friendly setup with [Jan](https://jan.ai) - no command line needed
+- Review and approve each field before applying to form
 
-**Privacy & Security:**
-- All AI processing runs locally on your computer
-- No external API calls or internet connection required
-- Suitable for sensitive business data
-- Models optimized for data extraction (Qwen 2.5, Mistral, Gemma)
+**How it Works:**
+1. Configure your OpenAI API key (one-time setup)
+2. Upload sustainability reports or financial documents
+3. Optionally add instructions (e.g., "Focus on Q1 2024 data")
+4. AI analyzes documents and extracts form data
+5. Review results with confidence scores and source citations
+6. Accept, edit, or reject each field
+7. Apply approved data to your form
 
-See [AI Assistant Documentation](AI_ASSISTANT.md) for setup and usage.
+**Powered by ChatGPT:**
+- Uses GPT-4 Turbo, GPT-4o, or GPT-3.5 models
+- Supports complex multi-document analysis
+- Estimates cost before processing (~$0.05-$0.50 per form)
+- Secure encrypted API key storage
+
+**Supported File Formats:**
+- ✅ Text files: TXT, CSV, JSON (fully supported)
+- 🚧 Binary files: PDF, DOCX, XLSX (coming soon - requires main process integration)
+
+**Privacy Notice:**
+- Requires OpenAI API key (you control your data)
+- Documents are sent to OpenAI for processing
+- See [OpenAI Privacy Policy](https://openai.com/policies/privacy-policy)
 
 ### VSME Sustainability Form
 Complete your Voluntary Sustainability Reporting Standard for Medium-sized Entities with an easy-to-use form that covers:
@@ -68,7 +83,7 @@ Built with modern web technologies wrapped in a desktop application:
 - **Desktop**: Electron 32
 - **Database**: SQLite (local storage)
 - **Styling**: Tailwind CSS + shadcn/ui
-- **AI Integration**: Local LLM via Jan (optional)
+- **AI Integration**: OpenAI API (ChatGPT) - optional
 
 ## For Developers
 
@@ -115,8 +130,8 @@ EFRAG-app/
 - [README.md](README.md) - This file
 - [QUICKSTART.md](QUICKSTART.md) - Quick start guide
 - [FEATURES.md](FEATURES.md) - Complete feature list
-- [AI_ASSISTANT.md](AI_ASSISTANT.md) - AI assistant setup and usage
 - [BUILD.md](BUILD.md) - Build instructions
+- [CLAUDE.md](CLAUDE.md) - Development documentation and AI feature implementation
 
 ## License
 
