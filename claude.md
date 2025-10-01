@@ -1,9 +1,78 @@
-# EFRAG Desktop - AI Autofill Feature Development
+# EFRAG Desktop - Development Documentation
 
 ## Current Status
-- **Branch**: `feature/experimental-ai-autofill` (created from main)
+- **Branch**: `main`
+- **Version**: 1.0.0
+- **Last Updated**: 2025-09-30
+
+## Build System
+
+### Cross-Platform Build Configuration (Updated 2025-09-30)
+
+#### Problem Solved: Windows Build with Native Modules
+The app uses `better-sqlite3`, a native C++ module that must be compiled for each platform. Building Windows installers from macOS was packaging macOS-compiled native modules, causing installation failures on Windows.
+
+**Solution Implemented:**
+- Added `@electron/rebuild` to properly rebuild native modules for target platforms
+- Added `postinstall` script to automatically install app dependencies for correct Electron version
+- Configured `asarUnpack` for better-sqlite3 to ensure native modules are accessible
+- Set explicit architecture targets (x64 for Windows, x64/arm64 for macOS)
+
+#### Build Commands
+- **Mac**: `npm run build:mac` - Builds DMG and ZIP for Intel (x64) and Apple Silicon (arm64)
+- **Windows**: `npm run build:win` - Builds NSIS installer and portable exe for x64
+- **All platforms**: `npm run build` - Builds for current platform
+
+#### Key Configuration (package.json)
+```json
+{
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "build:win": "vite build && electron-builder --win --x64",
+    "build:mac": "vite build && electron-builder --mac"
+  },
+  "build": {
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ],
+    "mac": {
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
+      ]
+    },
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ]
+    }
+  }
+}
+```
+
+#### Verification
+After building, verify native modules are correctly compiled:
+```bash
+# Check Windows build (should show "PE32+ executable... x86-64, for MS Windows")
+file release/win-unpacked/resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node
+
+# Check Mac build (should show "Mach-O 64-bit bundle arm64" or "x86_64")
+file release/mac-arm64/EFRAG\ Desktop.app/Contents/Resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node
+```
+
+#### Build Outputs
+- **Windows**: `release/EFRAG Desktop Setup 1.0.0.exe` (NSIS installer), `release/EFRAG Desktop 1.0.0.exe` (portable)
+- **Mac**: `release/EFRAG Desktop-1.0.0-arm64.dmg`, `release/EFRAG Desktop-1.0.0.dmg`, ZIP variants
+
+---
+
+# EFRAG Desktop - AI Autofill Feature Development
+
+## Planned Feature Status
+- **Branch**: TBD (not yet started)
 - **Feature**: Experimental AI-powered form autofill functionality
-- **Date**: 2025-09-30
+- **Priority**: Future enhancement
 
 ## Feature Overview
 Add an experimental feature that allows users to:
