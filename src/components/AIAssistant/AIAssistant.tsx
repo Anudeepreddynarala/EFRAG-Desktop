@@ -95,6 +95,16 @@ export function AIAssistant({ open, onClose, onApplyData }: AIAssistantProps) {
         });
 
         try {
+          // Check if file has a path (from Electron file picker)
+          if (!file.path) {
+            throw new Error('File path is missing. Please use the Browse Files button to select files.');
+          }
+
+          // Check if processDocument is available
+          if (!window.electronAPI?.processDocument) {
+            throw new Error('Document processing is not available. Please restart the application.');
+          }
+
           const result = await window.electronAPI.processDocument(file.path);
           if (result.success && result.content) {
             documents.push({
@@ -109,6 +119,40 @@ export function AIAssistant({ open, onClose, onApplyData }: AIAssistantProps) {
           setError(`Failed to process ${file.name}: ${error.message || 'Unknown error'}`);
           setStep('upload');
           return;
+        }
+      }
+
+      // Estimate total tokens
+      const totalChars = documents.reduce((sum, doc) => sum + doc.content.length, 0);
+      const estimatedTokens = Math.ceil(totalChars / 4); // Rough estimate: 4 chars ≈ 1 token
+
+      // Check if documents are too large for selected model
+      const modelLimits = {
+        [GPTModel.GPT35_TURBO]: 16000,
+        [GPTModel.GPT4O]: 128000,
+        [GPTModel.GPT4_TURBO]: 128000
+      };
+
+      const modelLimit = modelLimits[selectedModel];
+      if (estimatedTokens > modelLimit * 0.8) { // 80% threshold to account for output tokens
+        const modelName = selectedModel === GPTModel.GPT35_TURBO ? 'GPT-3.5' :
+                          selectedModel === GPTModel.GPT4O ? 'GPT-4o' : 'GPT-4 Turbo';
+
+        if (selectedModel === GPTModel.GPT35_TURBO) {
+          throw new Error(
+            `Your documents are too large (~${Math.round(estimatedTokens/1000)}K tokens) for ${modelName}.\n\n` +
+            'Please go back and:\n' +
+            '• Select GPT-4 Turbo or GPT-4o (supports 128K tokens)\n' +
+            '• Or use fewer/smaller documents'
+          );
+        } else {
+          throw new Error(
+            `Your documents are very large (~${Math.round(estimatedTokens/1000)}K tokens).\n\n` +
+            `This may exceed the ${modelName} limit. Consider:\n` +
+            '• Using fewer documents\n' +
+            '• Splitting large Excel files\n' +
+            '• Processing documents in batches'
+          );
         }
       }
 

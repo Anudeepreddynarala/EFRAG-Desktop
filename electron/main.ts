@@ -44,6 +44,15 @@ function initDatabase() {
 }
 
 function createWindow() {
+  // Try .mjs first (ES module), fall back to .js
+  let preloadPath = path.join(__dirname, 'preload.mjs');
+  if (!fs.existsSync(preloadPath)) {
+    preloadPath = path.join(__dirname, 'preload.js');
+  }
+
+  console.log('🟢 Preload path:', preloadPath);
+  console.log('🟢 Preload exists:', fs.existsSync(preloadPath));
+
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
@@ -52,7 +61,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js'),
+      preload: preloadPath,
+      sandbox: false, // Disable sandbox to ensure preload works
     },
     icon: path.join(__dirname, '../build/icon.png'),
   });
@@ -317,6 +327,19 @@ ipcMain.handle('select-files-for-ai', async () => {
   }
 });
 
+// Write buffer to temp file and return path (for drag-and-drop files)
+ipcMain.handle('write-temp-file', async (event, buffer: Buffer, originalName: string) => {
+  try {
+    const tempDir = os.tmpdir();
+    const tempPath = path.join(tempDir, `efrag-upload-${Date.now()}-${originalName}`);
+    fs.writeFileSync(tempPath, buffer);
+    return { success: true, path: tempPath };
+  } catch (error: any) {
+    console.error('Error writing temp file:', error);
+    return { success: false, error: error.message };
+  }
+});
+
 // Process documents (PDF, DOCX, Excel, etc.) for AI Assistant
 ipcMain.handle('process-document', async (event, filePath: string) => {
   try {
@@ -332,14 +355,27 @@ ipcMain.handle('process-document', async (event, filePath: string) => {
       const result = await mammoth.extractRawText({ buffer });
       return { success: true, content: result.value };
     } else if (['.xlsx', '.xls', '.csv'].includes(ext)) {
-      // Parse Excel/CSV files
+      // Parse Excel/CSV files - extract as JSON for more compact representation
       const workbook = XLSX.read(buffer, { type: 'buffer' });
       let text = '';
+
       workbook.SheetNames.forEach(name => {
         const sheet = workbook.Sheets[name];
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
         text += `\n\n=== Sheet: ${name} ===\n`;
-        text += XLSX.utils.sheet_to_csv(sheet);
+        text += `Total rows: ${jsonData.length}\n`;
+
+        // Include all data as JSON (more compact than CSV)
+        text += JSON.stringify(jsonData, null, 2);
+
+        // Add note if file is large
+        const estimatedTokens = text.length / 4; // Rough estimate: 4 chars = 1 token
+        if (estimatedTokens > 100000) {
+          text += `\n\n[Note: This file is very large (~${Math.round(estimatedTokens/1000)}K tokens). Consider using GPT-4 Turbo which supports 128K context window.]`;
+        }
       });
+
       return { success: true, content: text };
     } else if (['.txt', '.json'].includes(ext)) {
       // Plain text files

@@ -65,6 +65,38 @@ export function FileUploadZone({ files, onFilesChange, maxFiles = 10 }: FileUplo
       for (let i = 0; i < fileList.length; i++) {
         const file = fileList[i];
 
+        // In Electron, File objects may have a `path` property with the full file path
+        // Try multiple ways to get the file path
+        let filePath = (file as any).path;
+
+        if (!filePath && 'path' in file) {
+          filePath = (file as any).path;
+        }
+
+        // Log for debugging
+        console.log('🔵 File:', file.name, 'Path:', filePath, 'Keys:', Object.keys(file));
+
+        // If no path (drag-and-drop), write to temp file
+        if (!filePath || filePath === '') {
+          console.log('🔵 No path found, writing to temp file...');
+          try {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await window.electronAPI.writeTempFile(arrayBuffer, file.name);
+
+            if (result.success && result.path) {
+              filePath = result.path;
+              console.log('🟢 Temp file created:', filePath);
+            } else {
+              errors.push(`${file.name}: ${result.error || 'Failed to create temp file'}`);
+              continue;
+            }
+          } catch (error) {
+            console.error('🔴 Error creating temp file:', error);
+            errors.push(`${file.name}: Failed to process file`);
+            continue;
+          }
+        }
+
         // Validate file type
         if (!validateFileType(file.type, file.name)) {
           errors.push(`${file.name}: Unsupported file type`);
@@ -83,13 +115,13 @@ export function FileUploadZone({ files, onFilesChange, maxFiles = 10 }: FileUplo
           continue;
         }
 
-        // Create uploaded file object
+        // Create uploaded file object with file path
         const uploadedFile: UploadedFile = {
           id: `${Date.now()}-${i}`,
           name: file.name,
           size: file.size,
           type: file.type,
-          path: '' // Will be set by Electron
+          path: filePath
         };
 
         newFiles.push(uploadedFile);
@@ -142,27 +174,56 @@ export function FileUploadZone({ files, onFilesChange, maxFiles = 10 }: FileUplo
   );
 
   const handleElectronFilePicker = useCallback(async () => {
-    try {
-      const result = await window.electronAPI.selectFilesForAI();
+    console.log('🔵 Browse Files button clicked');
+    console.log('🔵 window.electronAPI:', window.electronAPI);
+    console.log('🔵 Available methods:', window.electronAPI ? Object.keys(window.electronAPI) : 'electronAPI is undefined!');
+    console.log('🔵 selectFilesForAI exists?', typeof window.electronAPI?.selectFilesForAI);
 
-      if (result && result.filePaths.length > 0) {
+    try {
+      // Check if the API is available
+      if (!window.electronAPI) {
+        throw new Error('Electron API not available. This app must run in Electron, not a web browser.');
+      }
+
+      if (!window.electronAPI.selectFilesForAI) {
+        throw new Error('File picker not available. Please restart the application.');
+      }
+
+      console.log('🔵 Calling selectFilesForAI...');
+      const result = await window.electronAPI.selectFilesForAI();
+      console.log('🔵 selectFilesForAI result:', result);
+
+      if (result && result.filePaths && result.filePaths.length > 0) {
         const newFiles: UploadedFile[] = result.filePaths.map((filePath, index) => {
           const fileName = filePath.split(/[\\/]/).pop() || filePath;
-          // Get file stats to determine size
+          // Determine file type from extension
+          const ext = filePath.split('.').pop()?.toLowerCase() || '';
+          const typeMap: Record<string, string> = {
+            'pdf': 'application/pdf',
+            'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'csv': 'text/csv',
+            'txt': 'text/plain',
+            'json': 'application/json'
+          };
+
           return {
             id: `${Date.now()}-${index}`,
             name: fileName,
-            size: 0, // Will be determined when reading
-            type: '', // Will be determined from extension
+            size: 0, // Will be determined when processing
+            type: typeMap[ext] || '',
             path: filePath
           };
         });
 
+        console.log('🔵 Adding files:', newFiles);
         onFilesChange([...files, ...newFiles]);
+      } else {
+        console.log('🔵 No files selected or user cancelled');
       }
     } catch (error) {
-      console.error('Error selecting files:', error);
-      setError('Failed to select files');
+      console.error('🔴 Error selecting files:', error);
+      setError(`Failed to select files: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }, [files, onFilesChange]);
 

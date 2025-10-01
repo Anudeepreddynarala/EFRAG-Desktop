@@ -179,9 +179,39 @@ export async function analyzeDocuments(
     if (error.status === 401) {
       throw new Error('Invalid API key. Please check your OpenAI API key.');
     } else if (error.status === 429) {
-      throw new Error('Rate limit exceeded. Please try again in a moment.');
+      throw new Error(
+        'OpenAI rate limit exceeded. This could mean:\n' +
+        '• Your API key has hit its usage limit\n' +
+        '• You need to upgrade your OpenAI plan\n' +
+        '• Wait a few minutes and try again\n\n' +
+        'Check your usage at: https://platform.openai.com/usage'
+      );
     } else if (error.status === 500) {
       throw new Error('OpenAI server error. Please try again later.');
+    } else if (error.code === 'context_length_exceeded' || error.message?.includes('maximum context length')) {
+      // Token limit exceeded error
+      const currentModel = model === GPTModel.GPT35_TURBO ? 'GPT-3.5 (16K tokens)' :
+                           model === GPTModel.GPT4O ? 'GPT-4o (128K tokens)' :
+                           'GPT-4 Turbo (128K tokens)';
+
+      if (model === GPTModel.GPT35_TURBO) {
+        throw new Error(
+          `Your documents are too large for ${currentModel}.\n\n` +
+          'Solutions:\n' +
+          '• Switch to GPT-4 Turbo or GPT-4o (supports 128K tokens)\n' +
+          '• Use fewer or smaller documents\n' +
+          '• Split large Excel files into smaller sheets\n\n' +
+          'Go back and select GPT-4 Turbo in the API setup to process large files.'
+        );
+      } else {
+        throw new Error(
+          `Your documents exceed even ${currentModel} limit.\n\n` +
+          'Solutions:\n' +
+          '• Use fewer documents\n' +
+          '• Split large Excel files into smaller files\n' +
+          '• Remove unnecessary sheets from Excel files'
+        );
+      }
     } else {
       throw new Error(`AI analysis failed: ${error.message || 'Unknown error'}`);
     }

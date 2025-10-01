@@ -1,5 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
+console.log('🟢 Preload script is loading...');
+
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -19,6 +21,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // AI Assistant file operations
   readFileBuffer: (filePath: string) => ipcRenderer.invoke('read-file-buffer', filePath),
   selectFilesForAI: () => ipcRenderer.invoke('select-files-for-ai'),
+  writeTempFile: (buffer: ArrayBuffer, originalName: string) => ipcRenderer.invoke('write-temp-file', Buffer.from(buffer), originalName),
   processDocument: (filePath: string) => ipcRenderer.invoke('process-document', filePath),
 
   // Menu event listeners
@@ -42,6 +45,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
 });
 
+console.log('🟢 electronAPI exposed to window');
+
 // Expose system info APIs for AI Assistant
 contextBridge.exposeInMainWorld('electron', {
   systemInfo: {
@@ -64,6 +69,7 @@ declare global {
       readFile: (filePath: string) => Promise<any>;
       readFileBuffer: (filePath: string) => Promise<Buffer>;
       selectFilesForAI: () => Promise<{ filePaths: string[] } | undefined>;
+      writeTempFile: (buffer: ArrayBuffer, originalName: string) => Promise<{ success: boolean; path?: string; error?: string }>;
       processDocument: (filePath: string) => Promise<{ success: boolean; content?: string; error?: string }>;
       onMenuNewReport: (callback: () => void) => void;
       onMenuOpenReport: (callback: () => void) => void;

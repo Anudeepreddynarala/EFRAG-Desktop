@@ -43,6 +43,12 @@ export default defineConfig(({ mode }) => ({
         vite: {
           build: {
             outDir: "dist-electron",
+            rollupOptions: {
+              output: {
+                format: 'es', // ES module format
+                entryFileNames: 'preload.mjs', // .mjs extension
+              },
+            },
           },
         },
       },
