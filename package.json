@@ -31,18 +31,40 @@
       "dist-electron/**/*",
       "package.json"
     ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ],
     "mac": {
-      "target": ["dmg", "zip"],
-      "category": "public.app-category.business",
-      "icon": "build/icon.icns"
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.business"
     },
     "win": {
-      "target": ["nsis", "portable"],
-      "icon": "build/icon.ico"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
   "dependencies": {
